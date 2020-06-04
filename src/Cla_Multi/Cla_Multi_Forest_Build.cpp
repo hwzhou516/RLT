@@ -29,6 +29,16 @@ void Cla_Multi_Forest_Build(const RLT_REG_DATA& REG_DATA,
                           int usecores,
                           int verbose)
 {
-
+   
+    #pragma omp parallel num_threads(usecores)
+    {
+      for(size_t nt=0; nt < ntrees; ny++)
+      {
+        Cla_Tree_class OneTree()
+        
+        Cla_Multi_Split_A_Node(OneTree)
+      }
+      
+    }
   
 }
