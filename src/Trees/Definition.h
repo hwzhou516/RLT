@@ -184,6 +184,26 @@ public:
                                         varweight(varweight) {}
 };
 
+class RLT_CLA_DATA{
+public:
+  arma::mat& X;
+  arma::uvec& Y;
+  arma::uvec& Censor;
+  arma::uvec& Ncat;
+  size_t NFail;
+  
+  RLT_CLA_DATA(arma::mat& X, 
+                arma::uvec& Y,
+                arma::uvec& Censor,
+                arma::uvec& Ncat,
+                size_t NFail,) : X(X), 
+                                 Y(Y), 
+                                 Censor(Censor),
+                                 Ncat(Ncat),
+                                 NFail(NFail) {}
+};
+ 
+
 // *********************** //
 //  Tree and forest class  //
 // *********************** //
@@ -381,6 +401,7 @@ public:
                                                                         NodeSize),
                                                          NodeHaz(NodeHaz) {}
   
+
   
   // initiate tree
   void initiate(size_t TreeLength)

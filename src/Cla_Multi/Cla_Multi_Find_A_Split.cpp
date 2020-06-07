@@ -23,12 +23,9 @@ void Cal_Multi_Find_A_Split(Uni_Split_Class& OneSplit,
   size_t mtry = Param.mtry;
   size_t nmin = Param.nmin;
   double alpha = Param.alpha;
-  bool useobsweight = Param.useobsweight;
-  bool usevarweight = Param.usevarweight;
   int nsplit = Param.nsplit;
   int split_gen = Param.split_gen;
   int split_rule = Param.split_rule;
-  bool reinforcement = Param.reinforcement;
   
   size_t N = obs_id.n_elem;
   size_t P = var_id.n_elem;
@@ -48,8 +45,7 @@ void Cal_Multi_Find_A_Split(Uni_Split_Class& OneSplit,
     TempSplit.value = 0;
     TempSplit.score = -1;
       
-      
-    Reg_Uni_Split_Cat(TempSplit, 
+    Cla_Multi_Split(TempSplit, 
                         obs_id, 
                         REG_DATA.X.unsafe_col(temp_var), 
                         REG_DATA.Ncat(temp_var),
