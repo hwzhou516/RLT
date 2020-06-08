@@ -34,6 +34,7 @@ public:
   int importance;  
   bool reinforcement;
   bool obs_track;
+  bool spectrum;
   size_t seed;
   
   PARAM_GLOBAL(List& param){
@@ -53,6 +54,7 @@ public:
     importance    = param["importance"];
     reinforcement = param["reinforcement"];
     obs_track     = param["track.obs"];
+    spectrum      = param["spectrum"];
     seed          = param["seed"];
   }
   
@@ -73,6 +75,7 @@ public:
       importance    = Input.importance;
       reinforcement = Input.reinforcement;
       obs_track     = Input.obs_track;
+      spectrum      = Input.spectrum;
       seed          = Input.seed;
   }
   
@@ -210,7 +213,7 @@ public:
 
 class Uni_Tree_Class{ // univariate split trees
 public:
-  arma::uvec& NodeType;
+  arma::uvec& NodeType; // 0: unused, 1: reserved; 2: internal node; 3: terminal node
   arma::uvec& SplitVar;
   arma::vec& SplitValue;
   arma::uvec& LeftNode;
@@ -462,12 +465,109 @@ public:
 };
 
 
+// for classification
 
+class Cla_Multi_Forest_Class{
+public:
+  arma::field<arma::uvec>& NodeTypeList;
+  arma::field<arma::uvec>& SplitVarList;
+  arma::field<arma::vec>& SplitValueList;
+  arma::field<arma::uvec>& LeftNodeList;
+  arma::field<arma::uvec>& RightNodeList;
+  arma::field<arma::vec>& NodeSizeList;  
+  arma::field<arma::vec>& NodeMajList;
+  
+  Reg_Uni_Forest_Class(arma::field<arma::uvec>& NodeTypeList,
+                       arma::field<arma::uvec>& SplitVarList,
+                       arma::field<arma::vec>& SplitValueList,
+                       arma::field<arma::uvec>& LeftNodeList,
+                       arma::field<arma::uvec>& RightNodeList,
+                       arma::field<arma::vec>& NodeSizeList,
+                       arma::field<arma::vec>& NodeMajList) : NodeTypeList(NodeTypeList), 
+                       SplitVarList(SplitVarList), 
+                       SplitValueList(SplitValueList),
+                       LeftNodeList(LeftNodeList),
+                       RightNodeList(RightNodeList),
+                       NodeSizeList(NodeSizeList),
+                       NodeMajList(NodeMajList) {}
+};
 
-
-
-
-
+class Cla_Multi_Tree_Class : public Uni_Tree_Class{
+public:
+  arma::vec& NodeAve;
+  
+  Reg_Uni_Tree_Class(arma::uvec& NodeType,
+                     arma::uvec& SplitVar,
+                     arma::vec& SplitValue,
+                     arma::uvec& LeftNode,
+                     arma::uvec& RightNode,
+                     arma::vec& NodeSize,
+                     arma::vec& NodeAve) : Uni_Tree_Class(NodeType, 
+                     SplitVar,
+                     SplitValue,
+                     LeftNode, 
+                     RightNode,
+                     NodeSize),
+                     NodeAve(NodeAve) {}
+  
+  // initiate tree
+  void initiate(size_t TreeLength)
+  {
+    if (TreeLength == 0) TreeLength = 1;
+    
+    NodeType.zeros(TreeLength);
+    
+    SplitVar.set_size(TreeLength);
+    SplitVar.fill(datum::nan);
+    
+    SplitValue.zeros(TreeLength);
+    LeftNode.zeros(TreeLength);
+    RightNode.zeros(TreeLength);
+    NodeSize.zeros(TreeLength);    
+    NodeAve.zeros(TreeLength);
+  }
+  
+  // trim tree 
+  void trim(size_t TreeLength)
+  {
+    NodeType.resize(TreeLength);
+    SplitVar.resize(TreeLength);
+    SplitValue.resize(TreeLength);
+    LeftNode.resize(TreeLength);
+    RightNode.resize(TreeLength);
+    NodeSize.resize(TreeLength);    
+    NodeAve.resize(TreeLength);
+  }
+  
+  // extend tree 
+  void extend()
+  {
+    // tree is not long enough, extend
+    size_t OldLength = NodeType.n_elem;
+    size_t NewLength = (OldLength*1.5 > OldLength + 100)? (size_t) (OldLength*1.5):(OldLength + 100);
+    
+    NodeType.resize(NewLength);
+    NodeType(span(OldLength, NewLength-1)).zeros();
+    
+    SplitVar.resize(NewLength);
+    SplitVar(span(OldLength, NewLength-1)).fill(datum::nan);
+    
+    SplitValue.resize(NewLength);
+    SplitValue(span(OldLength, NewLength-1)).zeros();
+    
+    LeftNode.resize(NewLength);
+    LeftNode(span(OldLength, NewLength-1)).zeros();
+    
+    RightNode.resize(NewLength);
+    RightNode(span(OldLength, NewLength-1)).zeros();
+    
+    NodeSize.resize(NewLength);
+    NodeSize(span(OldLength, NewLength-1)).zeros();    
+    
+    NodeAve.resize(NewLength);
+    NodeAve(span(OldLength, NewLength-1)).zeros();
+  }
+};
 
 
 // **************** //

@@ -97,6 +97,6 @@ double cla_unsuper_score_var(uvec& indices,
   
   size_t N = indices.size();
   
-  
+  return 0;
 }
 

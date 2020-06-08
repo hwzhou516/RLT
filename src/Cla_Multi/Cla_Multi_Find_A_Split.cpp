@@ -13,7 +13,7 @@ using namespace Rcpp;
 using namespace arma;
 
 void Cal_Multi_Find_A_Split(Uni_Split_Class& OneSplit,
-                          const RLT_REG_DATA& REG_DATA,
+                          const RLT_CLA_DATA& CLA_DATA,
                           const PARAM_GLOBAL& Param,
                           const PARAM_RLT& RLTParam,
                           uvec& obs_id,

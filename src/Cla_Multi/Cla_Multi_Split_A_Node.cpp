@@ -25,7 +25,7 @@ void Cla_Multi_Split_A_Node(size_t Node,
   size_t nmin = Param.nmin;
   
   if (N < 2*nmin){
-    TERMINATENODE:
+TERMINATENODE:
     DEBUG_Rcout << "  -- Terminate node " << Node << std::endl;
     Cla_Multi_Terminate_Node(Node, OneTree, obs_id, CLA_DATA.Y, CLA_DATA.obsweight, Param);
   }else{
@@ -37,7 +37,8 @@ void Cla_Multi_Split_A_Node(size_t Node,
     
     DEBUG_Rcout << "  -- Found split on variable " << OneSplit.var << " cut " << OneSplit.value << " and score " << OneSplit.score << std::endl;
     
-    OneTree.NodeAve(Node) = arma::mean(CLA_DATA.Y(obs_id));
+    // Store voting result in one node
+    OneTree.NodeMaj(Node) = arma::major(CLA_DATA.Y(obs_id));
     // if did not find a good split, terminate
     if (OneSplit.score <= 0)
       goto TERMINATENODE;
@@ -58,11 +59,6 @@ void Cla_Multi_Split_A_Node(size_t Node,
       DEBUG_Rcout << "  -- select cat variable " << OneSplit.var << " split at " << OneSplit.value << std::endl;
     }
     
-    Uni_Split_Class OneSplit;
-    
-    Cla_Multi_Terminate_Node();
-  
-    Cla_Multi_Find_A_Split;
     
     // if this happens something about the splitting rule is wrong
     if (left_id.n_elem == N or obs_id.n_elem == N)
@@ -128,7 +124,10 @@ void Cla_Multi_Terminate_Node(size_t Node,
                             const PARAM_GLOBAL& Param,
                             bool useobsweight)
 {
+  OneTree.NodeType(Node) = 3; // 0: unused, 1: reserved; 2: internal node; 3: terminal node
+  OneTree.NodeSize(Node) = obs_id.n_elem;
   
- 
-
+    // DEBUG_Rcout << "terminate Major" << std::endl;
+    OneTree.NodeMaj(Node) = arma::major(Y(obs_id)
+  
 }

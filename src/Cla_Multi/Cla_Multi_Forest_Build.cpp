@@ -29,7 +29,6 @@ void Cla_Multi_Forest_Build(const RLT_CLA_DATA& CLA_DATA,
                             int usecores,
                             int verbose)
 {
-  
    // parameters need to be used
    size_t ntrees = Param.ntrees;
    bool replacement = Param.replacement;
@@ -65,7 +64,6 @@ void Cla_Multi_Forest_Build(const RLT_CLA_DATA& CLA_DATA,
         TreeLength = OneTree.get_tree_length();
         OneTree.trim(TreeLength);  
       }
-      
     }
   
 }

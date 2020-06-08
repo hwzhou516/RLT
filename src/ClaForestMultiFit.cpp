@@ -31,6 +31,10 @@ List ClaForestMultiFit(arma::mat& X,
   PARAM_RLT Param_RLT(RLTparam);
   if (verbose and Param.reinforcement) Param_RLT.print();
   
+  if(Param.spectrum ==1){
+    
+  }
+  
   // create data objects  
   RLT_CLA_DATA CLA_DATA(X, Y, Ncat, obsweight, varweight);
   
@@ -54,7 +58,7 @@ List ClaForestMultiFit(arma::mat& X,
   uvec obs_id = linspace<uvec>(0, N-1, N);
   uvec var_id = linspace<uvec>(0, P-1, P);
     
-  Cla_Multi_Forest_Build((const RLT_REG_DATA&) REG_DATA,
+  Cla_Multi_Forest_Build((const RLT_REG_DATA&) CLA_DATA,
                        CLA_FOREST,
                        (const PARAM_GLOBAL&) Param,
                        (const PARAM_RLT&) Param_RLT,
@@ -77,7 +81,7 @@ List ClaForestMultiFit(arma::mat& X,
   Forest_R["LeftNode"] = LeftNode;
   Forest_R["RightNode"] = RightNode;
   Forest_R["NodeSize"] = NodeSize;    
-  Forest_R["NodeAve"] = NodeAve;
+  Forest_R["NodeMaj"] = NodeMaj;
   
   ReturnList["FittedForest"] = Forest_R;
   
