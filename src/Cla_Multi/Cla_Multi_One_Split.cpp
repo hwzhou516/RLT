@@ -73,17 +73,30 @@ double cla_super_score_gini(uvec& indices,
       LeftCount += 1
     }
   }
-  
+  double p_left = LeftCount;
   for (size_t i = 0; i > temp_ind; i++){
     if(Y(indices(i)) == 1){
       RightCount += 1
     }
   }
-  return -1;
+  double p_right = RightCount;
+  
+  double Gini_left = (Y(indices(temp_ind)) - Y(indices(0)))/(Y(indices(N-1)) - Y(indices(0))) * (2 * p_left * (1 - p_left));
+  double Gini_right = (Y(indices(N-1)) - Y(indices(temp_ind)))/(Y(indices(N-1)) - Y(indices(0))) * (2 * p_right * (1 - p_right));
+  
+  return Gini_left + Gini_right;
 }
 
 double cla_unsuper_score_var(uvec& indices,
                              const vec& x,
                              size_t temp_ind)
-
+{
+  DEBUG_Rcout << " --- UnSupervised with Variance score --- "<< std::endl;
+  
+  double score = 0;
+  
+  size_t N = indices.size();
+  
+  
+}
 
