@@ -26,16 +26,16 @@ void Cla_Multi_Split_A_Node(size_t Node,
   
   if (N < 2*nmin){
 TERMINATENODE:
-    DEBUG_Rcout << "  -- Terminate node " << Node << std::endl;
+    DEBUG_Rcout << "  -- Terminate node --" << Node << std::endl;
     Cla_Multi_Terminate_Node(Node, OneTree, obs_id, CLA_DATA.Y, CLA_DATA.obsweight, Param);
   }else{
-    DEBUG_Rcout << "  -- Do split" << std::endl;
+    DEBUG_Rcout << "  -- Do split --" << std::endl;
     
     Uni_Split_Class OneSplit;
     
     Cla_Multi_Find_A_Split(OneSplit, CLA_DATA, Param, Param_RLT, obs_id, var_id);
     
-    DEBUG_Rcout << "  -- Found split on variable " << OneSplit.var << " cut " << OneSplit.value << " and score " << OneSplit.score << std::endl;
+    DEBUG_Rcout << "-- Found split on variable --" << OneSplit.var << " cut " << OneSplit.value << " and score " << OneSplit.score << std::endl;
     
     // Store voting result in one node
     OneTree.NodeMaj(Node) = arma::major(CLA_DATA.Y(obs_id));
@@ -44,19 +44,19 @@ TERMINATENODE:
       goto TERMINATENODE;
     
     // construct indices for left and right nodes
-    DEBUG_Rcout << "  -- splitting value is " << OneSplit.value << std::endl;
+    DEBUG_Rcout << "  -- splitting value is --" << OneSplit.value << std::endl;
     
     uvec left_id(obs_id.n_elem);
     
-    if ( REG_DATA.Ncat(OneSplit.var) == 1 )
+    if ( CLA_DATA.Ncat(OneSplit.var) == 1 )
     {
-      split_id(REG_DATA.X.unsafe_col(OneSplit.var), OneSplit.value, left_id, obs_id);  
+      split_id(CLA_DATA.X.unsafe_col(OneSplit.var), OneSplit.value, left_id, obs_id);  
       
-      DEBUG_Rcout << "  -- select cont variable " << OneSplit.var << " split at " << OneSplit.value << std::endl;
+      DEBUG_Rcout << "-- select cont variable --" << OneSplit.var << " split at " << OneSplit.value << std::endl;
     }else{
-      split_id_cat(REG_DATA.X.unsafe_col(OneSplit.var), OneSplit.value, left_id, obs_id, REG_DATA.Ncat(OneSplit.var));
+      split_id_cat(CLA_DATA.X.unsafe_col(OneSplit.var), OneSplit.value, left_id, obs_id, REG_DATA.Ncat(OneSplit.var));
       
-      DEBUG_Rcout << "  -- select cat variable " << OneSplit.var << " split at " << OneSplit.value << std::endl;
+      DEBUG_Rcout << "  -- select cat variable --" << OneSplit.var << " split at " << OneSplit.value << std::endl;
     }
     
     
@@ -82,8 +82,8 @@ TERMINATENODE:
     
     OneTree.find_next_nodes(NextLeft, NextRight);
     
-    DEBUG_Rcout << "  -- Next Left at " << NextLeft << std::endl;
-    DEBUG_Rcout << "  -- Next Right at " << NextRight << std::endl;
+    DEBUG_Rcout << "  -- Next Left at --" << NextLeft << std::endl;
+    DEBUG_Rcout << "  -- Next Right at --" << NextRight << std::endl;
     
     // record tree 
     

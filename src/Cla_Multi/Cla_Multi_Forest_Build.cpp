@@ -48,7 +48,7 @@ void Cla_Multi_Forest_Build(const RLT_CLA_DATA& CLA_DATA,
                                      CLA_FOREST.LeftNodeList(nt),
                                      CLA_FOREST.RightNodeList(nt),
                                      CLA_FOREST.NodeSizeList(nt),
-                                     CLA_FOREST.NodeAveList(nt));
+                                     CLA_FOREST.NodeMajList(nt));
         
         size_t TreeLength = 1 + size/nmin*3;
         OneTree.initiate(TreeLength);

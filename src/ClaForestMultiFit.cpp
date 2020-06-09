@@ -58,7 +58,7 @@ List ClaForestMultiFit(arma::mat& X,
   uvec obs_id = linspace<uvec>(0, N-1, N);
   uvec var_id = linspace<uvec>(0, P-1, P);
     
-  Cla_Multi_Forest_Build((const RLT_REG_DATA&) CLA_DATA,
+  Cla_Multi_Forest_Build((const RLT_CLA_DATA&) CLA_DATA,
                        CLA_FOREST,
                        (const PARAM_GLOBAL&) Param,
                        (const PARAM_RLT&) Param_RLT,

@@ -34,7 +34,7 @@ public:
   int importance;  
   bool reinforcement;
   bool obs_track;
-  bool spectrum;
+  bool spectrum; // indicator of spectrum clustering and transformation of X
   size_t seed;
   
   PARAM_GLOBAL(List& param){
