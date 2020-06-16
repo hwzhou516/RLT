@@ -43,9 +43,19 @@ List GraphClaForestMultiFit(arma::mat& X,
   size_t ntrees = Param.ntrees;
   size_t seed = Param.seed;
   
+  int obs_track = Param.obs_track;
+  int importance = Param.importance;
+  // VarImp
+  vec VarImp;
+  if (importance)
+    VarImp.zeros(P);
+  // prediction
+  vec Prediction;
+  vec OOBPrediction;
+  
   // initiate forest
   arma::field<arma::uvec> NodeType(ntrees);
-  arma::field<arma::field<arma::uvec>> SplitLoading(ntrees);
+  arma::field<arma::field<arma::vec>> SplitLoading(ntrees);
   arma::field<arma::vec> SplitValue(ntrees);
   arma::field<arma::uvec> LeftNode(ntrees);
   arma::field<arma::uvec> RightNode(ntrees);
@@ -76,12 +86,12 @@ List GraphClaForestMultiFit(arma::mat& X,
   List Forest_R;
   
   Forest_R["NodeType"] = NodeType;
-  Forest_R["SplitVar"] = SplitVar;
+  Forest_R["SplitVar"] = SplitValue;
   Forest_R["SplitValue"] = SplitValue;
   Forest_R["LeftNode"] = LeftNode;
   Forest_R["RightNode"] = RightNode;
   Forest_R["NodeSize"] = NodeSize;    
-  Forest_R["NodeMaj"] = NodeMaj;
+  Forest_R["NodeAve"] = NodeAve;
   
   ReturnList["FittedForest"] = Forest_R;
   

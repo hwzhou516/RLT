@@ -1,6 +1,6 @@
 //  **********************************
 //  Reinforcement Learning Trees (RLT)
-//  Regression
+//  Graph Classification
 //  **********************************
 
 // my header file
@@ -12,18 +12,16 @@
 using namespace Rcpp;
 using namespace arma;
 
-void Cla_Multi_Split(Cla_Split_Class& TempSplit,
+void Graph_Cla_Split(Multi_Split_Class& TempSplit,
                         uvec& obs_id,
                         const vec& x,
                         const vec& Y,
-                        const vec& obs_weight,
                         double penalty,
                         int split_gen,
                         int split_rule,
                         int nsplit,
                         size_t nmin,
-                        double alpha,
-                        bool useobsweight)
+                        double alpha)
 {
   size_t N = obs_id.n_elem;
 
@@ -39,13 +37,9 @@ void Cla_Multi_Split(Cla_Split_Class& TempSplit,
   
   for(int k=0; k < N; k++){
     temp_ind = indices(k);
-    if(supervise == 1){
-      // get the cut-off point based on the variance
-        tempt_score = cla_super_score_gini(indices, Y, temp_ind);
-     }else{
-        tempt_score = cla_unsuper_score_var(indices, x, temp_ind);
-     }
-  
+    // get the cut-off point based on the variance
+    temp_score = graph_cla_score_gini(indices, Y, temp_ind);
+
     if (temp_score > TempSplit.score){
        TempSplit.value = temp_cut;
        TempSplit.score = temp_score;
@@ -55,7 +49,7 @@ void Cla_Multi_Split(Cla_Split_Class& TempSplit,
 }
 
 
-double cla_super_score_gini(uvec& indices,
+double graph_cla_score_gini(uvec& indices,
                             const vec& Y,
                             size_t temp_ind)
 {
@@ -66,17 +60,17 @@ double cla_super_score_gini(uvec& indices,
   size_t N = indices.size();
   
   size_t LeftCount = 0;
-  size_t RightCouunt = 0;
+  size_t RightCount = 0;
   
   for (size_t i = 0; i <= temp_ind; i++){
     if(Y(indices(i)) == 1){
-      LeftCount += 1
+      LeftCount += 1;
     }
   }
   double p_left = LeftCount;
   for (size_t i = 0; i > temp_ind; i++){
     if(Y(indices(i)) == 1){
-      RightCount += 1
+      RightCount += 1;
     }
   }
   double p_right = RightCount;

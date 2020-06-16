@@ -27,18 +27,19 @@ void Graph_Cla_Split_A_Node(size_t Node,
   if (N < 2*nmin){
 TERMINATENODE:
     DEBUG_Rcout << "  -- Terminate node --" << Node << std::endl;
-    Cla_Multi_Terminate_Node(Node, OneTree, obs_id, CLA_DATA.Y, CLA_DATA.obsweight, Param);
+    Graph_Cla_Terminate_Node(Node, OneTree, obs_id, CLA_DATA.Y, CLA_DATA.obsweight, Param);
   }else{
     DEBUG_Rcout << "  -- Do split --" << std::endl;
     
-    Multi_Split_Class OneSplit;
+    arma::vec Loading(P);
+    Multi_Split_Class OneSplit(Loading);
     
-    Graph_Cla_Find_A_Split(OneSplit, CLA_DATA, Param, Param_RLT, obs_id, var_id);
+    Graph_Find_A_Split(OneSplit, CLA_DATA, Param, Param_RLT, obs_id, var_id);
     
-    DEBUG_Rcout << "-- Found split on variable --" << OneSplit.var << " cut " << OneSplit.value << " and score " << OneSplit.score << std::endl;
+    DEBUG_Rcout << "-- Found split on variable --" << OneSplit.Loading << " cut " << OneSplit.value << " and score " << OneSplit.score << std::endl;
     
     // Store voting result in one node
-    OneTree.NodeMaj(Node) = arma::major(CLA_DATA.Y(obs_id));
+    OneTree.NodeAve(Node) = arma::major(CLA_DATA.Y(obs_id));
     // if did not find a good split, terminate
     if (OneSplit.score <= 0)
       goto TERMINATENODE;
@@ -54,7 +55,7 @@ TERMINATENODE:
       
       DEBUG_Rcout << "-- select cont variable --" << OneSplit.var << " split at " << OneSplit.value << std::endl;
     }else{
-      split_id_cat(CLA_DATA.X.unsafe_col(OneSplit.var), OneSplit.value, left_id, obs_id, REG_DATA.Ncat(OneSplit.var));
+      split_id_cat(CLA_DATA.X.unsafe_col(OneSplit.var), OneSplit.value, left_id, obs_id, CLA_DATA.Ncat(OneSplit.var));
       
       DEBUG_Rcout << "  -- select cat variable --" << OneSplit.var << " split at " << OneSplit.value << std::endl;
     }
@@ -87,7 +88,7 @@ TERMINATENODE:
     
     // record tree 
     
-    OneTree.SplitVar(Node) = OneSplit.var;
+    OneTree.SplitLoading(Node) = OneSplit.Loading;
     OneTree.SplitValue(Node) = OneSplit.value;
     OneTree.LeftNode(Node) = NextLeft;
     OneTree.RightNode(Node) = NextRight;    
@@ -96,17 +97,17 @@ TERMINATENODE:
     
     // split the left and right nodes 
     
-    Cla_Multi_Split_A_Node(NextLeft, 
+    Graph_Cla_Split_A_Node(NextLeft, 
                            OneTree,
-                           REG_DATA,
+                           CLA_DATA,
                            Param,
                            Param_RLT, 
                            left_id, 
                            var_id);
     
-    Cla_Multi_Split_A_Node(NextRight,                          
+    Graph_Cla_Split_A_Node(NextRight,                          
                            OneTree,
-                           REG_DATA,
+                           CLA_DATA,
                            Param,
                            Param_RLT, 
                            obs_id, 
@@ -116,7 +117,7 @@ TERMINATENODE:
 
 // terminate and record a node
 
-void Cla_Multi_Terminate_Node(size_t Node, 
+void Graph_Cla_Terminate_Node(size_t Node, 
                             Reg_Uni_Tree_Class& OneTree,
                             uvec& obs_id,                            
                             const vec& Y,
@@ -127,7 +128,8 @@ void Cla_Multi_Terminate_Node(size_t Node,
   OneTree.NodeType(Node) = 3; // 0: unused, 1: reserved; 2: internal node; 3: terminal node
   OneTree.NodeSize(Node) = obs_id.n_elem;
   
-    // DEBUG_Rcout << "terminate Major" << std::endl;
-    OneTree.NodeMaj(Node) = arma::major(Y(obs_id)
+  // DEBUG_Rcout << "terminate Major" << std::endl;
+  OneTree.NodeAve(Node) = arma::major(Y(obs_id)；
   
+  return；                                      
 }

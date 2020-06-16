@@ -197,8 +197,8 @@ public:
   
   RLT_CLA_DATA(arma::mat& X, 
                arma::uvec& Y,
-               arma::uvec& Ncat;
-                 arma::vec& obsweight;
+               arma::uvec& Ncat,
+                 arma::vec& obsweight,
                  arma::vec& varweight) : X(X), 
                  Y(Y), 
                  Ncat(Ncat),
@@ -466,7 +466,6 @@ public:
 
 
 // multivariate tree 
-
 class Multi_Tree_Class{ // univariate split trees
 public:
   arma::uvec& NodeType; // 0: unused, 1: reserved; 2: internal node; 3: terminal node
@@ -518,7 +517,7 @@ public:
   
   Cla_Multi_Tree_Class(arma::uvec& NodeType,
                        arma::field<arma::vec>& SplitLoading,
-                       arma::uvec& SplitValue,
+                       arma::vec& SplitValue,
                        arma::uvec& LeftNode,
                        arma::uvec& RightNode,
                        arma::vec& NodeSize,
@@ -593,15 +592,15 @@ public:
 class Cla_Multi_Forest_Class{
 public:
   arma::field<arma::uvec>& NodeTypeList;
-  arma::field<arma::field<arma::uvec>>& SplitLoadingList;
+  arma::field<arma::field<arma::vec>>& SplitLoadingList;
   arma::field<arma::vec>& SplitValueList;
   arma::field<arma::uvec>& LeftNodeList;
   arma::field<arma::uvec>& RightNodeList;
   arma::field<arma::vec>& NodeSizeList;  
   arma::field<arma::vec>& NodeAveList;
   
-  Surv_Uni_Forest_Class(arma::field<arma::uvec>& NodeTypeList,
-                        arma::field<arma::field<arma::uvec>>& SplitLoadingList,
+  Cla_Multi_Forest_Class(arma::field<arma::uvec>& NodeTypeList,
+                        arma::field<arma::field<arma::vec>>& SplitLoadingList,
                         arma::field<arma::vec>& SplitValueList,
                         arma::field<arma::uvec>& LeftNodeList,
                         arma::field<arma::uvec>& RightNodeList,
@@ -633,14 +632,16 @@ public:
   }
 };
 
-class Multi_Split_Class{ // univariate splits
+class Multi_Split_Class{ // Multi-variate splits
 public:
   arma::vec& Loading;
   double value = 0;
   double score = -1;
   
+  Multi_Split_Class(arma::vec& Loading): Loading(Loading){}
+  
   void print(void) {
-    Rcout << "Splitting loading is " << var << " value is " << value << " score is " << score << std::endl;
+    Rcout << "Splitting loading is " << Loading << " value is " << value << " score is " << score << std::endl;
   }
 };
 

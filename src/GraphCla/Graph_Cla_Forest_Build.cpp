@@ -16,7 +16,7 @@ using namespace Rcpp;
 using namespace arma;
 
 void Graph_Cla_Forest_Build(const RLT_CLA_DATA& CLA_DATA,
-                            CLA_Multi_Forest_Class& CLA_FOREST,
+                            Cla_Multi_Forest_Class& CLA_FOREST,
                             const PARAM_GLOBAL& Param,
                             const PARAM_RLT& Param_RLT,
                             uvec& obs_id,
@@ -43,7 +43,7 @@ void Graph_Cla_Forest_Build(const RLT_CLA_DATA& CLA_DATA,
       for(size_t nt=0; nt < ntrees; nt++)
       {
         Cla_Multi_Tree_Class OneTree(CLA_FOREST.NodeTypeList(nt), 
-                                     CLA_FOREST.SplitLoading(nt),
+                                     CLA_FOREST.SplitLoadingList(nt),
                                      CLA_FOREST.SplitValueList(nt),
                                      CLA_FOREST.LeftNodeList(nt),
                                      CLA_FOREST.RightNodeList(nt),
