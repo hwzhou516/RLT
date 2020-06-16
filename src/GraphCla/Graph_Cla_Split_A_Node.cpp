@@ -129,7 +129,7 @@ void Graph_Cla_Terminate_Node(size_t Node,
   OneTree.NodeSize(Node) = obs_id.n_elem;
   
   // DEBUG_Rcout << "terminate Major" << std::endl;
-  OneTree.NodeAve(Node) = arma::major(Y(obs_id)；
+  OneTree.NodeAve(Node) = arma::major(Y(obs_id);
   
-  return；                                      
+  return;                                      
 }
