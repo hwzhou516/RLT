@@ -57,9 +57,9 @@ void Graph_Find_A_Split(Multi_Split_Class& OneSplit,
     TempSplit.value = 0;
     TempSplit.score = -1;
       
-    Cla_Multi_Split(TempSplit, 
+    Graph_Cla_Split(TempSplit, 
                         obs_id, 
-                        Tempmat(j), 
+                        Tempmat.col(j), 
                         CLA_DATA.Y, 
                         0.0, // penalty
                         split_gen, 
