@@ -1,0 +1,81 @@
+//  **********************************
+//  Reinforcement Learning Trees (RLT)
+//  Regression
+//  **********************************
+
+// my header file
+# include "RLT.h"
+# include "Trees//Trees.h"
+# include "Utility//Utility.h"
+
+using namespace Rcpp;
+using namespace arma;
+
+#ifndef ClaForest_Fun
+#define ClaForest_Fun
+
+// univariate tree split functions 
+
+List ClaForestMultiFit(arma::mat& X,
+                       arma::uvec& Y,
+                       arma::uvec& Ncat,
+                       List& param,
+                       List& RLTparam,
+                       arma::vec& obsweight,
+                       arma::vec& varweight,
+                       int usecores,
+                       int verbose,
+                       arma::umat& ObsTrack);
+
+void Graph_Cla_Forest_Build(const RLT_CLA_DATA& CLA_DATA,
+                            Cla_Multi_Forest_Class& CLA_FOREST,
+                            const PARAM_GLOBAL& Param,
+                            const PARAM_RLT& Param_RLT,
+                            uvec& obs_id,
+                            uvec& var_id,
+                            umat& ObsTrack,
+                            vec& Prediction,
+                            vec& OOBPrediction,
+                            vec& VarImp,
+                            size_t seed, // this is not done yet
+                            int usecores,
+                            int verbose);
+
+void Graph_Cla_Split_A_Node(size_t Node,
+                            Cla_Multi_Tree_Class& OneTree,
+                            const RLT_CLA_DATA& CLA_DATA,
+                            const PARAM_GLOBAL& Param,
+                            const PARAM_RLT& Param_RLT,
+                            uvec& obs_id,
+                            uvec& var_id);
+
+void Graph_Cla_Terminate_Node(size_t Node, 
+                              Reg_Uni_Tree_Class& OneTree,
+                              uvec& obs_id,                            
+                              const vec& Y,
+                              const vec& obs_weight,                            
+                              const PARAM_GLOBAL& Param,
+                              bool useobsweight);
+
+void Graph_Find_A_Split(Multi_Split_Class& OneSplit,
+                        const RLT_CLA_DATA& CLA_DATA,
+                        const PARAM_GLOBAL& Param,
+                        const PARAM_RLT& RLTParam,
+                        uvec& obs_id,
+                        uvec& var_id);
+
+void Graph_Cla_Split(Multi_Split_Class& TempSplit,
+                     uvec& obs_id,
+                     const vec& x,
+                     const vec& Y,
+                     double penalty,
+                     int split_gen,
+                     int split_rule,
+                     int nsplit,
+                     size_t nmin,
+                     double alpha);
+
+double graph_cla_score_gini(uvec& indices,
+                              const vec& Y,
+                              size_t temp_ind);
+#endif
