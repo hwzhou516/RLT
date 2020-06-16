@@ -56,8 +56,7 @@ void Graph_Cla_Forest_Build(const RLT_CLA_DATA& CLA_DATA,
         // start to fit a tree
         OneTree.NodeType(0) = 1; // 0: unused, 1: reserved; 2: internal node; 3: terminal node
         
-        Graph_Cla_Split_A_Node(0, OneTree, CLA_DATA, 
-                               Param, Param_RLT, obs_id, var_id);
+        Graph_Cla_Split_A_Node(0, OneTree, CLA_DATA, Param, Param_RLT, obs_id, var_id);
         
         // trim tree 
         TreeLength = OneTree.get_tree_length();
