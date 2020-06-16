@@ -7,7 +7,7 @@
 # include "../RLT.h"
 # include "../Trees//Trees.h"
 # include "../Utility/Utility.h"
-# include "../regForest.h"
+# include "../GraphClaForest.h"
 
 using namespace Rcpp;
 using namespace arma;
@@ -27,7 +27,7 @@ void Graph_Cla_Split_A_Node(size_t Node,
   if (N < 2*nmin){
 TERMINATENODE:
     DEBUG_Rcout << "  -- Terminate node --" << Node << std::endl;
-    Graph_Cla_Terminate_Node(Node, OneTree, obs_id, CLA_DATA.Y, CLA_DATA.obsweight, Param); //*
+    Graph_Cla_Terminate_Node(Node, OneTree, obs_id, CLA_DATA.Y, CLA_DATA.obsweight, Param); //*  
   }else{
     DEBUG_Rcout << "  -- Do split --" << std::endl;
     

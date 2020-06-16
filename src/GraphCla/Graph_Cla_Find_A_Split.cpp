@@ -7,7 +7,7 @@
 # include "../RLT.h"
 # include "../Trees//Trees.h"
 # include "../Utility/Utility.h"
-# include "../regForest.h"
+# include "../GraphClaForest.h"
 
 using namespace Rcpp;
 using namespace arma;
@@ -51,7 +51,7 @@ void Graph_Find_A_Split(Multi_Split_Class& OneSplit,
   }
   
   // select the best variable
-  for(size_t j = 0; j < 1; j++)
+  for(size_t j = 0; j < k; j++)
   {
     Multi_Split_Class TempSplit( TempLoading(j) );
     TempSplit.value = 0;

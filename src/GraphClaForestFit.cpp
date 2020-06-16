@@ -6,7 +6,7 @@
 // my header file
 # include "RLT.h"
 # include "Utility/Utility.h"
-# include "claForest.h"
+# include "GraphClaForest.h"
 
 using namespace Rcpp;
 using namespace arma;

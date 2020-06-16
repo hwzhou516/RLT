@@ -7,7 +7,7 @@
 # include "../RLT.h"
 # include "../Trees//Trees.h"
 # include "../Utility/Utility.h"
-# include "../claForest.h"
+# include "../GraphClaForest.h"
 
 #include <xoshiro.h>
 #include <dqrng_distribution.h>
