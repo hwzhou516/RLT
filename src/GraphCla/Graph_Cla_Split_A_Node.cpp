@@ -27,19 +27,19 @@ void Graph_Cla_Split_A_Node(size_t Node,
   if (N < 2*nmin){
 TERMINATENODE:
     DEBUG_Rcout << "  -- Terminate node --" << Node << std::endl;
-    Graph_Cla_Terminate_Node(Node, OneTree, obs_id, CLA_DATA.Y, CLA_DATA.obsweight, Param);
+    Graph_Cla_Terminate_Node(Node, OneTree, obs_id, CLA_DATA.Y, CLA_DATA.obsweight, Param); //*
   }else{
     DEBUG_Rcout << "  -- Do split --" << std::endl;
     
     arma::vec Loading(P);
     Multi_Split_Class OneSplit(Loading);
     
-    Graph_Find_A_Split(OneSplit, CLA_DATA, Param, Param_RLT, obs_id, var_id);
+    Graph_Find_A_Split(OneSplit, CLA_DATA, Param, Param_RLT, obs_id, var_id); // *
     
     DEBUG_Rcout << "-- Found split on variable --" << OneSplit.Loading << " cut " << OneSplit.value << " and score " << OneSplit.score << std::endl;
     
     // Store voting result in one node
-    OneTree.NodeAve(Node) = arma::major(CLA_DATA.Y(obs_id));
+    OneTree.NodeAve(Node) = (arma::mean(CLA_DATA.Y(obs_id)) > 0.5 ? 1 : 0);
     // if did not find a good split, terminate
     if (OneSplit.score <= 0)
       goto TERMINATENODE;
@@ -49,17 +49,8 @@ TERMINATENODE:
     
     uvec left_id(obs_id.n_elem);
     
-    if ( CLA_DATA.Ncat(OneSplit.var) == 1 )
-    {
-      split_id(CLA_DATA.X.unsafe_col(OneSplit.var), OneSplit.value, left_id, obs_id);  
-      
-      DEBUG_Rcout << "-- select cont variable --" << OneSplit.var << " split at " << OneSplit.value << std::endl;
-    }else{
-      split_id_cat(CLA_DATA.X.unsafe_col(OneSplit.var), OneSplit.value, left_id, obs_id, CLA_DATA.Ncat(OneSplit.var));
-      
-      DEBUG_Rcout << "  -- select cat variable --" << OneSplit.var << " split at " << OneSplit.value << std::endl;
-    }
-    
+    split_id_Graph(CLA_DATA.X, OneSplit.Loading , OneSplit.value, left_id, obs_id);  // get the left and right id
+    //DEBUG_Rcout << "-- select cont variable --" << OneSplit.var << " split at " << OneSplit.value << std::endl;
     
     // if this happens something about the splitting rule is wrong
     if (left_id.n_elem == N or obs_id.n_elem == N)
@@ -67,7 +58,6 @@ TERMINATENODE:
     
     // check if the current tree is long enough to store two more nodes
     // if not, extend the current tree
-    
     if ( OneTree.NodeType( OneTree.NodeType.size() - 2) > 0 )
     {
       DEBUG_Rcout << "  ------------- extend tree length: this shouldn't happen ----------- " << std::endl;
@@ -81,7 +71,7 @@ TERMINATENODE:
     size_t NextLeft = Node;
     size_t NextRight = Node;
     
-    OneTree.find_next_nodes(NextLeft, NextRight);
+    OneTree.find_next_nodes(NextLeft, NextRight); //*
     
     DEBUG_Rcout << "  -- Next Left at --" << NextLeft << std::endl;
     DEBUG_Rcout << "  -- Next Right at --" << NextRight << std::endl;
@@ -95,11 +85,17 @@ TERMINATENODE:
     
     OneTree.NodeSize(Node) = left_id.n_elem + obs_id.n_elem;
     
+    RLT_CLA_DATA Left_Data = CLA_DATA;
+    RLT_CLA_DATA Right_Data = CLA_DATA;
+    
+    Left_Data.X = Left_Data.X(left_id,left_id);
+    Right_Data.X = Right_Data.X(obs_id,obs_id);
+    
     // split the left and right nodes 
     
     Graph_Cla_Split_A_Node(NextLeft, 
                            OneTree,
-                           CLA_DATA,
+                           Left_Data,
                            Param,
                            Param_RLT, 
                            left_id, 
@@ -107,7 +103,7 @@ TERMINATENODE:
     
     Graph_Cla_Split_A_Node(NextRight,                          
                            OneTree,
-                           CLA_DATA,
+                           Right_Data,
                            Param,
                            Param_RLT, 
                            obs_id, 
@@ -129,7 +125,7 @@ void Graph_Cla_Terminate_Node(size_t Node,
   OneTree.NodeSize(Node) = obs_id.n_elem;
   
   // DEBUG_Rcout << "terminate Major" << std::endl;
-  OneTree.NodeAve(Node) = arma::major(Y(obs_id);
+  OneTree.NodeAve(Node) = (arma::mean(Y(obs_id)) > 0.5? 1:0);
   
   return;                                      
 }

@@ -241,6 +241,31 @@ void split_id_cat(const vec& x, double value, uvec& left_id, uvec& obs_id, size_
   obs_id.resize(RightN+1);
 }
 
+void split_id_Graph(const mat& X, const vec& Loading, double value, uvec& left_id, uvec& obs_id) // obs_id will be treated as the right node
+{
+  vec x = X * Loading;
+  size_t RightN = obs_id.n_elem - 1;
+  size_t LeftN = 0;
+  size_t i = 0;
+  
+  while( i <= RightN ){
+    
+    if ( x(obs_id(i)) <= value )
+    {
+      // move subject to left 
+      left_id(LeftN++) = obs_id(i);
+      
+      // remove subject from right 
+      obs_id(i) = obs_id( RightN--);
+    }else{
+      i++;
+    }
+  }
+  
+  left_id.resize(LeftN);
+  obs_id.resize(RightN+1);
+}
+
 // ****************//
 // field functions //
 // ****************//
