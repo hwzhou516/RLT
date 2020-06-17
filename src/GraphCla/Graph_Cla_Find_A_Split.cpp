@@ -28,45 +28,64 @@ void Graph_Find_A_Split(Multi_Split_Class& OneSplit,
   
   size_t N = obs_id.n_elem;
   size_t P = var_id.n_elem;
-
   mtry = ( (mtry <= P) ? mtry:P ); // take minimum
-  
-  uvec var_try = arma::randperm(P, mtry);
   
   DEBUG_Rcout << " --- Reg_Find_A_Split with mtry = " << mtry << std::endl;
   
   // SVD Decomposition
-  arma::mat A = CLA_DATA.X.cols(var_id(var_try));
+  int method = 1;
+  arma::mat A;
+  
+  if (method == 1) // submatrix col same as rows
+    arma::mat A = CLA_DATA.X(obs_id, obs_id);
+  
+  if (method == 2) // use all cols 
+  {
+    if (mtry == P)
+    {
+      arma::mat A = CLA_DATA.X(obs_id, var_id);
+    }else{
+        uvec var_try = arma::randperm(P, mtry);
+        arma::mat A = CLA_DATA.X(obs_id, var_id(var_try));      
+      
+    }
+  }
+  
+  if (method == 3) // laplacian
+  {
+    // redefine A = laplacian
+    DEBUG_Rcout << " laplacian not done yet " << std::endl;
+  }
+  
+
   arma::mat U; arma::mat V; arma::vec s;
   svd(U,s,V,A);
   
   // Tempmat contains the first k principle component
   // TempLoading contains the corresponding vector
-  size_t k = 2;
-  arma::mat Tempmat(N,k);
-  Tempmat.cols(span(0,k)) = U.cols(span(0,k));
-  arma::field<arma::vec> TempLoading(k);
-  for(size_t i =0; i<k; i++){
-    TempLoading(i) = V.col(i)/s(i);
-  }
   
+  size_t k = 2;
+  
+  arma::uvec Y = CLA_DATA.Y(obs_id);
+    
   // select the best variable
   for(size_t j = 0; j < k; j++)
   {
-    Multi_Split_Class TempSplit( TempLoading(j) );
+    arma::vec TempLoad = V.col(j)/s(j);
+    Multi_Split_Class TempSplit( TempLoad );
     TempSplit.value = 0;
     TempSplit.score = -1;
       
     Graph_Cla_Split(TempSplit, 
-                        obs_id, 
-                        Tempmat.col(j), 
-                        CLA_DATA.Y, 
-                        0.0, // penalty
-                        split_gen, 
-                        split_rule, 
-                        nsplit, 
-                        nmin, 
-                        alpha);
+                    obs_id, 
+                    U.unsafe_col(j),
+                    Y,
+                    0.0, // penalty
+                    split_gen, 
+                    split_rule, 
+                    nsplit, 
+                    nmin, 
+                    alpha);
     
     if (TempSplit.score > OneSplit.score)
     {

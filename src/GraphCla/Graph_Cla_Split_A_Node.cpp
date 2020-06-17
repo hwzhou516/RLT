@@ -23,11 +23,12 @@ void Graph_Cla_Split_A_Node(size_t Node,
   size_t N = obs_id.n_elem;
   size_t P = Param.P;
   size_t nmin = Param.nmin;
+  bool useobsweight = Param.useobsweight;
   
   if (N < 2*nmin){
 TERMINATENODE:
     DEBUG_Rcout << "  -- Terminate node --" << Node << std::endl;
-    Graph_Cla_Terminate_Node(Node, OneTree, obs_id, CLA_DATA.Y, CLA_DATA.obsweight, Param); //*  
+    Graph_Cla_Terminate_Node(Node, OneTree, obs_id, CLA_DATA.Y, CLA_DATA.obsweight, Param, useobsweight); //*  
   }else{
     DEBUG_Rcout << "  -- Do split --" << std::endl;
     
@@ -38,8 +39,9 @@ TERMINATENODE:
     
     DEBUG_Rcout << "-- Found split on variable --" << OneSplit.Loading << " cut " << OneSplit.value << " and score " << OneSplit.score << std::endl;
     
-    // Store voting result in one node
-    OneTree.NodeAve(Node) = (arma::mean(CLA_DATA.Y(obs_id)) > 0.5 ? 1 : 0);
+    // store proportion
+    OneTree.NodeAve(Node) = arma::mean(CLA_DATA.Y(obs_id));
+    
     // if did not find a good split, terminate
     if (OneSplit.score <= 0)
       goto TERMINATENODE;
@@ -49,7 +51,7 @@ TERMINATENODE:
     
     uvec left_id(obs_id.n_elem);
     
-    split_id_Graph(CLA_DATA.X, OneSplit.Loading , OneSplit.value, left_id, obs_id);  // get the left and right id
+    split_id_multi(CLA_DATA.X, OneSplit.Loading, OneSplit.value, left_id, obs_id);  // get the left and right id
     //DEBUG_Rcout << "-- select cont variable --" << OneSplit.var << " split at " << OneSplit.value << std::endl;
     
     // if this happens something about the splitting rule is wrong
@@ -85,25 +87,19 @@ TERMINATENODE:
     
     OneTree.NodeSize(Node) = left_id.n_elem + obs_id.n_elem;
     
-    RLT_CLA_DATA Left_Data = CLA_DATA;
-    RLT_CLA_DATA Right_Data = CLA_DATA;
-    
-    Left_Data.X = Left_Data.X(left_id,left_id);
-    Right_Data.X = Right_Data.X(obs_id,obs_id);
-    
     // split the left and right nodes 
     
-    Graph_Cla_Split_A_Node(NextLeft, 
+    Graph_Cla_Split_A_Node(NextLeft,
                            OneTree,
-                           Left_Data,
+                           CLA_DATA,
                            Param,
-                           Param_RLT, 
-                           left_id, 
+                           Param_RLT,
+                           left_id,
                            var_id);
     
     Graph_Cla_Split_A_Node(NextRight,                          
                            OneTree,
-                           Right_Data,
+                           CLA_DATA,
                            Param,
                            Param_RLT, 
                            obs_id, 
@@ -114,18 +110,18 @@ TERMINATENODE:
 // terminate and record a node
 
 void Graph_Cla_Terminate_Node(size_t Node, 
-                            Reg_Uni_Tree_Class& OneTree,
-                            uvec& obs_id,                            
-                            const vec& Y,
-                            const vec& obs_weight,                            
-                            const PARAM_GLOBAL& Param,
-                            bool useobsweight)
+                              Cla_Multi_Tree_Class& OneTree,
+                              uvec& obs_id,                            
+                              const uvec& Y,
+                              const vec& obs_weight,                            
+                              const PARAM_GLOBAL& Param,
+                              bool useobsweight)
 {
   OneTree.NodeType(Node) = 3; // 0: unused, 1: reserved; 2: internal node; 3: terminal node
   OneTree.NodeSize(Node) = obs_id.n_elem;
   
   // DEBUG_Rcout << "terminate Major" << std::endl;
-  OneTree.NodeAve(Node) = (arma::mean(Y(obs_id)) > 0.5? 1:0);
+  OneTree.NodeAve(Node) = arma::mean(Y(obs_id));
   
   return;                                      
 }

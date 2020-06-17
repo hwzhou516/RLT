@@ -50,9 +50,9 @@ void Graph_Cla_Split_A_Node(size_t Node,
                             uvec& var_id);
 
 void Graph_Cla_Terminate_Node(size_t Node, 
-                              Reg_Uni_Tree_Class& OneTree,
+                              Cla_Multi_Tree_Class& OneTree,
                               uvec& obs_id,                            
-                              const vec& Y,
+                              const uvec& Y,
                               const vec& obs_weight,                            
                               const PARAM_GLOBAL& Param,
                               bool useobsweight);
@@ -67,7 +67,7 @@ void Graph_Find_A_Split(Multi_Split_Class& OneSplit,
 void Graph_Cla_Split(Multi_Split_Class& TempSplit,
                      uvec& obs_id,
                      const vec& x,
-                     const vec& Y,
+                     const uvec& Y,
                      double penalty,
                      int split_gen,
                      int split_rule,
@@ -76,6 +76,6 @@ void Graph_Cla_Split(Multi_Split_Class& TempSplit,
                      double alpha);
 
 double graph_cla_score_gini(uvec& indices,
-                              const vec& Y,
+                              const uvec& Y,
                               size_t temp_ind);
 #endif
