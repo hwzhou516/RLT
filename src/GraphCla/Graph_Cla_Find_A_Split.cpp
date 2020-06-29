@@ -54,10 +54,11 @@ void Graph_Find_A_Split(Multi_Split_Class& OneSplit,
   if (method == 3) // laplacian
   {
     // redefine A = laplacian
-    DEBUG_Rcout << " laplacian not done yet " << std::endl;
+    arma::mat A = CLA_DATA.X(obs_id, var_id);
+    A = diagmat(A.each_row( [ ](vec& a){ sum(a); } )) - A;
+    //DEBUG_Rcout << " laplacian not done yet " << std::endl;
   }
   
-
   arma::mat U; arma::mat V; arma::vec s;
   svd(U,s,V,A);
   

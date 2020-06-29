@@ -138,7 +138,7 @@ RLT <- function(x, y, censor = NULL, model = NULL,
   if (missing(y)) stop("y is missing")
   
   # check model type
-  model = check_input(x, y, censor, model)
+  model = "classificaiton" #check_input(x, y, censor, model)
 
   p = ncol(x)
   n = nrow(x)
@@ -280,6 +280,18 @@ RLT <- function(x, y, censor = NULL, model = NULL,
                              ObsTrack,
                              ...)
     }
+  if(model == "classification")
+  {
+    cat("run classification forest")
+    
+    RLT.fit = GraphClaForest(x, y, censor, ncat,
+                             param, RLT.control,
+                             obs.w, var.w,
+                             ncores, verbose,
+                             ObsTrack,
+                             ...)
+  }
+
 
   RLT.fit$"xnames" = xnames
   

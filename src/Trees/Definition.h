@@ -476,11 +476,13 @@ public:
   arma::vec& NodeSize;
   
   Multi_Tree_Class(arma::uvec& NodeType,
+                   arma::field<arma::uvec>& SplitVarList,
                    arma::field<arma::vec>& SplitLoading,
                    arma::vec& SplitValue,
                    arma::uvec& LeftNode,
                    arma::uvec& RightNode,
                    arma::vec& NodeSize) : NodeType(NodeType),
+                   SplitVarList(SplitVarList),
                    SplitLoading(SplitLoading),
                    SplitValue(SplitValue),
                    LeftNode(LeftNode),
@@ -516,12 +518,14 @@ public:
   arma::vec& NodeAve;
   
   Cla_Multi_Tree_Class(arma::uvec& NodeType,
+                       arma::field<arma::uvec>& SplitVarList,
                        arma::field<arma::vec>& SplitLoading,
                        arma::vec& SplitValue,
                        arma::uvec& LeftNode,
                        arma::uvec& RightNode,
                        arma::vec& NodeSize,
                        arma::vec& NodeAve) : Multi_Tree_Class(NodeType, 
+                       SplitVarList,
                        SplitLoading,
                        SplitValue,
                        LeftNode, 
@@ -536,7 +540,7 @@ public:
     if (TreeLength == 0) TreeLength = 1;
     
     NodeType.zeros(TreeLength);
-    
+    SplitVarList(TreeLength);
     SplitLoading.set_size(TreeLength);
     
     SplitValue.zeros(TreeLength);
