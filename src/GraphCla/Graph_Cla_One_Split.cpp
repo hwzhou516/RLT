@@ -26,7 +26,7 @@ void Graph_Cla_Split(Multi_Split_Class& TempSplit,
   
   double temp_score;
   
-  uvec indices = span(0, N);
+  uvec indices = linspace<uvec>(0, N);
   indices = indices(sort_index(x)); // this is the sorted obs_id
   
   // check identical 
@@ -50,7 +50,7 @@ void Graph_Cla_Split(Multi_Split_Class& TempSplit,
 
 double graph_cla_score_gini(uvec& indices,
                             const uvec& Y,
-                            size_t k)
+                            size_t& k)
 {
   DEBUG_Rcout <<" --- Supervised with Gini score --- "<< std::endl;
   

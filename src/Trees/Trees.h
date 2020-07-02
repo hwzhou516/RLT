@@ -39,6 +39,14 @@ void Uni_Find_Terminal_Node_ShuffleJ(size_t Node,
                                      const vec& tildex,
                                      const size_t j);
 
+void Multi_Find_Terminal_Node(size_t Node, 
+                              const Multi_Tree_Class& OneTree,
+                              const mat& X,
+                              const uvec& Ncat,
+                              uvec& proxy_id,
+                              const uvec& real_id,
+                              uvec& TermNode);
+
 List ForestKernelUni(arma::field<arma::uvec>& NodeType,
                      arma::field<arma::uvec>& SplitVar,
                      arma::field<arma::vec>& SplitValue,

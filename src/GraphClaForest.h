@@ -78,4 +78,12 @@ void Graph_Cla_Split(Multi_Split_Class& TempSplit,
 double graph_cla_score_gini(uvec& indices,
                               const uvec& Y,
                               size_t temp_ind);
+
+void Cla_Multi_Forest_Pred(mat& Pred,
+                           const Cla_Multi_Forest_Class& CLA_FOREST,
+                           const mat& X,
+                           const uvec& Ncat,
+                           const uvec& treeindex,
+                           int usecores,
+                           int verbose);
 #endif

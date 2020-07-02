@@ -58,7 +58,7 @@ public:
     seed          = param["seed"];
   }
   
-  copyfrom(const PARAM_GLOBAL& Input){
+void  copyfrom(const PARAM_GLOBAL& Input){
     N             = Input.N;
     P             = Input.P;
     ntrees        = Input.ntrees;
@@ -469,6 +469,7 @@ public:
 class Multi_Tree_Class{ // univariate split trees
 public:
   arma::uvec& NodeType; // 0: unused, 1: reserved; 2: internal node; 3: terminal node
+  arma::field<arma::uvec>& SplitVar;
   arma::field<arma::vec>& SplitLoading;
   arma::vec& SplitValue;
   arma::uvec& LeftNode;
@@ -476,13 +477,13 @@ public:
   arma::vec& NodeSize;
   
   Multi_Tree_Class(arma::uvec& NodeType,
-                   arma::field<arma::uvec>& SplitVarList,
+                   arma::field<arma::uvec>& SplitVar,
                    arma::field<arma::vec>& SplitLoading,
                    arma::vec& SplitValue,
                    arma::uvec& LeftNode,
                    arma::uvec& RightNode,
                    arma::vec& NodeSize) : NodeType(NodeType),
-                   SplitVarList(SplitVarList),
+                   SplitVar(SplitVar),
                    SplitLoading(SplitLoading),
                    SplitValue(SplitValue),
                    LeftNode(LeftNode),
@@ -518,14 +519,14 @@ public:
   arma::vec& NodeAve;
   
   Cla_Multi_Tree_Class(arma::uvec& NodeType,
-                       arma::field<arma::uvec>& SplitVarList,
+                       arma::field<arma::uvec>& SplitVar,
                        arma::field<arma::vec>& SplitLoading,
                        arma::vec& SplitValue,
                        arma::uvec& LeftNode,
                        arma::uvec& RightNode,
                        arma::vec& NodeSize,
                        arma::vec& NodeAve) : Multi_Tree_Class(NodeType, 
-                       SplitVarList,
+                       SplitVar,
                        SplitLoading,
                        SplitValue,
                        LeftNode, 
@@ -540,7 +541,7 @@ public:
     if (TreeLength == 0) TreeLength = 1;
     
     NodeType.zeros(TreeLength);
-    SplitVarList(TreeLength);
+    SplitVar.set_size(TreeLength);
     SplitLoading.set_size(TreeLength);
     
     SplitValue.zeros(TreeLength);
@@ -596,6 +597,7 @@ public:
 class Cla_Multi_Forest_Class{
 public:
   arma::field<arma::uvec>& NodeTypeList;
+  arma::field<arma::field<arma::uvec>>& SplitVarList;
   arma::field<arma::field<arma::vec>>& SplitLoadingList;
   arma::field<arma::vec>& SplitValueList;
   arma::field<arma::uvec>& LeftNodeList;
@@ -604,12 +606,14 @@ public:
   arma::field<arma::vec>& NodeAveList;
   
   Cla_Multi_Forest_Class(arma::field<arma::uvec>& NodeTypeList,
+                         arma::field<arma::field<arma::uvec>>& SplitVarList,
                         arma::field<arma::field<arma::vec>>& SplitLoadingList,
                         arma::field<arma::vec>& SplitValueList,
                         arma::field<arma::uvec>& LeftNodeList,
                         arma::field<arma::uvec>& RightNodeList,
                         arma::field<arma::vec>& NodeSizeList,
                         arma::field<arma::vec>& NodeAveList) : NodeTypeList(NodeTypeList), 
+                        SplitVarList(SplitVarList),
                         SplitLoadingList(SplitLoadingList), 
                         SplitValueList(SplitValueList),
                         LeftNodeList(LeftNodeList),

@@ -280,8 +280,8 @@ RLT <- function(x, y, censor = NULL, model = NULL,
                              ObsTrack,
                              ...)
     }
-  if(model == "classification")
-  {
+   if(model == "classification")
+   {
     cat("run classification forest")
     
     RLT.fit = GraphClaForest(x, y, censor, ncat,
@@ -290,7 +290,7 @@ RLT <- function(x, y, censor = NULL, model = NULL,
                              ncores, verbose,
                              ObsTrack,
                              ...)
-  }
+   }
 
 
   RLT.fit$"xnames" = xnames

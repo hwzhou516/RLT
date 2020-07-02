@@ -6,26 +6,6 @@
 
 using namespace Rcpp;
 
-// ClaForestMultiFit
-List ClaForestMultiFit(arma::mat& X, arma::uvec& Y, arma::uvec& Ncat, List& param, List& RLTparam, arma::vec& obsweight, arma::vec& varweight, int usecores, int verbose, arma::umat& ObsTrack);
-RcppExport SEXP _RLT_ClaForestMultiFit(SEXP XSEXP, SEXP YSEXP, SEXP NcatSEXP, SEXP paramSEXP, SEXP RLTparamSEXP, SEXP obsweightSEXP, SEXP varweightSEXP, SEXP usecoresSEXP, SEXP verboseSEXP, SEXP ObsTrackSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::mat& >::type X(XSEXP);
-    Rcpp::traits::input_parameter< arma::uvec& >::type Y(YSEXP);
-    Rcpp::traits::input_parameter< arma::uvec& >::type Ncat(NcatSEXP);
-    Rcpp::traits::input_parameter< List& >::type param(paramSEXP);
-    Rcpp::traits::input_parameter< List& >::type RLTparam(RLTparamSEXP);
-    Rcpp::traits::input_parameter< arma::vec& >::type obsweight(obsweightSEXP);
-    Rcpp::traits::input_parameter< arma::vec& >::type varweight(varweightSEXP);
-    Rcpp::traits::input_parameter< int >::type usecores(usecoresSEXP);
-    Rcpp::traits::input_parameter< int >::type verbose(verboseSEXP);
-    Rcpp::traits::input_parameter< arma::umat& >::type ObsTrack(ObsTrackSEXP);
-    rcpp_result_gen = Rcpp::wrap(ClaForestMultiFit(X, Y, Ncat, param, RLTparam, obsweight, varweight, usecores, verbose, ObsTrack));
-    return rcpp_result_gen;
-END_RCPP
-}
 // EofVar
 List EofVar(arma::umat& ObsTrack, arma::mat& Pred, arma::uvec& C, int usecores, int verbose);
 RcppExport SEXP _RLT_EofVar(SEXP ObsTrackSEXP, SEXP PredSEXP, SEXP CSEXP, SEXP usecoresSEXP, SEXP verboseSEXP) {
@@ -80,6 +60,50 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type usecores(usecoresSEXP);
     Rcpp::traits::input_parameter< int >::type verbose(verboseSEXP);
     rcpp_result_gen = Rcpp::wrap(ForestKernelUni_Cross(NodeType, SplitVar, SplitValue, LeftNode, RightNode, NodeSize, XTest, XTrain, Ncat, ObsTrack, usecores, verbose));
+    return rcpp_result_gen;
+END_RCPP
+}
+// GraphClaForestMultiFit
+List GraphClaForestMultiFit(arma::mat& X, arma::uvec& Y, arma::uvec& Ncat, List& param, List& RLTparam, arma::vec& obsweight, arma::vec& varweight, int usecores, int verbose, arma::umat& ObsTrack);
+RcppExport SEXP _RLT_GraphClaForestMultiFit(SEXP XSEXP, SEXP YSEXP, SEXP NcatSEXP, SEXP paramSEXP, SEXP RLTparamSEXP, SEXP obsweightSEXP, SEXP varweightSEXP, SEXP usecoresSEXP, SEXP verboseSEXP, SEXP ObsTrackSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat& >::type X(XSEXP);
+    Rcpp::traits::input_parameter< arma::uvec& >::type Y(YSEXP);
+    Rcpp::traits::input_parameter< arma::uvec& >::type Ncat(NcatSEXP);
+    Rcpp::traits::input_parameter< List& >::type param(paramSEXP);
+    Rcpp::traits::input_parameter< List& >::type RLTparam(RLTparamSEXP);
+    Rcpp::traits::input_parameter< arma::vec& >::type obsweight(obsweightSEXP);
+    Rcpp::traits::input_parameter< arma::vec& >::type varweight(varweightSEXP);
+    Rcpp::traits::input_parameter< int >::type usecores(usecoresSEXP);
+    Rcpp::traits::input_parameter< int >::type verbose(verboseSEXP);
+    Rcpp::traits::input_parameter< arma::umat& >::type ObsTrack(ObsTrackSEXP);
+    rcpp_result_gen = Rcpp::wrap(GraphClaForestMultiFit(X, Y, Ncat, param, RLTparam, obsweight, varweight, usecores, verbose, ObsTrack));
+    return rcpp_result_gen;
+END_RCPP
+}
+// GraphClaForestMultiPred
+List GraphClaForestMultiPred(arma::field<arma::uvec>& NodeType, arma::field<arma::field<arma::uvec>> SplitVar, arma::field<arma::field<arma::vec>> SplitLoading, arma::field<arma::vec>& SplitValue, arma::field<arma::uvec>& LeftNode, arma::field<arma::uvec>& RightNode, arma::field<arma::vec>& NodeSize, arma::field<arma::vec>& NodeAve, arma::mat& X, arma::uvec& Ncat, arma::uvec& treeindex, bool keep_all, int usecores, int verbose);
+RcppExport SEXP _RLT_GraphClaForestMultiPred(SEXP NodeTypeSEXP, SEXP SplitVarSEXP, SEXP SplitLoadingSEXP, SEXP SplitValueSEXP, SEXP LeftNodeSEXP, SEXP RightNodeSEXP, SEXP NodeSizeSEXP, SEXP NodeAveSEXP, SEXP XSEXP, SEXP NcatSEXP, SEXP treeindexSEXP, SEXP keep_allSEXP, SEXP usecoresSEXP, SEXP verboseSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::field<arma::uvec>& >::type NodeType(NodeTypeSEXP);
+    Rcpp::traits::input_parameter< arma::field<arma::field<arma::uvec>> >::type SplitVar(SplitVarSEXP);
+    Rcpp::traits::input_parameter< arma::field<arma::field<arma::vec>> >::type SplitLoading(SplitLoadingSEXP);
+    Rcpp::traits::input_parameter< arma::field<arma::vec>& >::type SplitValue(SplitValueSEXP);
+    Rcpp::traits::input_parameter< arma::field<arma::uvec>& >::type LeftNode(LeftNodeSEXP);
+    Rcpp::traits::input_parameter< arma::field<arma::uvec>& >::type RightNode(RightNodeSEXP);
+    Rcpp::traits::input_parameter< arma::field<arma::vec>& >::type NodeSize(NodeSizeSEXP);
+    Rcpp::traits::input_parameter< arma::field<arma::vec>& >::type NodeAve(NodeAveSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type X(XSEXP);
+    Rcpp::traits::input_parameter< arma::uvec& >::type Ncat(NcatSEXP);
+    Rcpp::traits::input_parameter< arma::uvec& >::type treeindex(treeindexSEXP);
+    Rcpp::traits::input_parameter< bool >::type keep_all(keep_allSEXP);
+    Rcpp::traits::input_parameter< int >::type usecores(usecoresSEXP);
+    Rcpp::traits::input_parameter< int >::type verbose(verboseSEXP);
+    rcpp_result_gen = Rcpp::wrap(GraphClaForestMultiPred(NodeType, SplitVar, SplitLoading, SplitValue, LeftNode, RightNode, NodeSize, NodeAve, X, Ncat, treeindex, keep_all, usecores, verbose));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -206,10 +230,11 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_RLT_ClaForestMultiFit", (DL_FUNC) &_RLT_ClaForestMultiFit, 10},
     {"_RLT_EofVar", (DL_FUNC) &_RLT_EofVar, 5},
     {"_RLT_ForestKernelUni_Self", (DL_FUNC) &_RLT_ForestKernelUni_Self, 10},
     {"_RLT_ForestKernelUni_Cross", (DL_FUNC) &_RLT_ForestKernelUni_Cross, 12},
+    {"_RLT_GraphClaForestMultiFit", (DL_FUNC) &_RLT_GraphClaForestMultiFit, 10},
+    {"_RLT_GraphClaForestMultiPred", (DL_FUNC) &_RLT_GraphClaForestMultiPred, 14},
     {"_RLT_RegForestUniFit", (DL_FUNC) &_RLT_RegForestUniFit, 10},
     {"_RLT_RegForestUniPred", (DL_FUNC) &_RLT_RegForestUniPred, 13},
     {"_RLT_SurvForestUniFit", (DL_FUNC) &_RLT_SurvForestUniFit, 11},

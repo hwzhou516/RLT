@@ -13,6 +13,7 @@ using namespace arma;
 
 // [[Rcpp::export()]]
 List GraphClaForestMultiPred(arma::field<arma::uvec>& NodeType,
+                             arma::field<arma::field<arma::uvec>> SplitVar,
                              arma::field<arma::field<arma::vec>> SplitLoading,
                              arma::field<arma::vec>& SplitValue,
                              arma::field<arma::uvec>& LeftNode,
@@ -31,7 +32,7 @@ List GraphClaForestMultiPred(arma::field<arma::uvec>& NodeType,
   
   // convert R object to forest
   
-  Cla_Multi_Forest_Class CLA_FOREST(NodeType, SplitLoading, SplitValue, LeftNode, RightNode, NodeSize, NodeAve);
+  Cla_Multi_Forest_Class CLA_FOREST(NodeType, SplitVar, SplitLoading, SplitValue, LeftNode, RightNode, NodeSize, NodeAve);
   
   mat PredAll;
   

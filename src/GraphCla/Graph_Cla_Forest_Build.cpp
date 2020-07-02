@@ -43,6 +43,7 @@ void Graph_Cla_Forest_Build(const RLT_CLA_DATA& CLA_DATA,
       for(size_t nt=0; nt < ntrees; nt++)
       {
         Cla_Multi_Tree_Class OneTree(CLA_FOREST.NodeTypeList(nt), 
+                                     CLA_FOREST.SplitVarList(nt),
                                      CLA_FOREST.SplitLoadingList(nt),
                                      CLA_FOREST.SplitValueList(nt),
                                      CLA_FOREST.LeftNodeList(nt),
@@ -54,8 +55,8 @@ void Graph_Cla_Forest_Build(const RLT_CLA_DATA& CLA_DATA,
         OneTree.initiate(TreeLength);
         
         // start to fit a tree
-        OneTree.NodeType(0) = 1; // 0: unused, 1: reserved; 2: internal node; 3: terminal node
-        
+        // 0: unused, 1: reserved; 2: internal node; 3: terminal node
+        OneTree.NodeType(0) = 1;
         Graph_Cla_Split_A_Node(0, OneTree, CLA_DATA, Param, Param_RLT, obs_id, var_id);
         
         // trim tree 

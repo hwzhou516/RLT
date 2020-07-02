@@ -54,11 +54,14 @@ void Graph_Find_A_Split(Multi_Split_Class& OneSplit,
   if (method == 3) // laplacian
   {
     // redefine A = laplacian
-    arma::mat A = CLA_DATA.X(obs_id, var_id);
-    A = diagmat(A.each_row( [ ](vec& a){ sum(a); } )) - A;
+    //arma::mat A = CLA_DATA.X(obs_id, var_id);
+    //A = diagmat(A.each_row( [ ](vec& a){ sum(a); } )) - A;
     //DEBUG_Rcout << " laplacian not done yet " << std::endl;
   }
   
+  // Centering
+  
+  // SVD Decomposition
   arma::mat U; arma::mat V; arma::vec s;
   svd(U,s,V,A);
   
@@ -73,7 +76,7 @@ void Graph_Find_A_Split(Multi_Split_Class& OneSplit,
   for(size_t j = 0; j < k; j++)
   {
     arma::vec TempLoad = V.col(j)/s(j);
-    Multi_Split_Class TempSplit( TempLoad );
+    Multi_Split_Class TempSplit(TempLoad);
     TempSplit.value = 0;
     TempSplit.score = -1;
       

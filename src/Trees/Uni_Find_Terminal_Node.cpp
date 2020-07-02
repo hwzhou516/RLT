@@ -38,7 +38,6 @@ void Uni_Find_Terminal_Node(size_t Node,
     
     if ( Ncat(SplitVar) > 1 ) // categorical var 
     {
-      
       uvec goright(Ncat(SplitVar) + 1);
       unpack(SplitValue, Ncat(SplitVar) + 1, goright); // from Andy's rf package
       

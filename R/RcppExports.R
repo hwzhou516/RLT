@@ -17,8 +17,8 @@ GraphClaForestMultiFit <- function(X, Y, Ncat, param, RLTparam, obsweight, varwe
     .Call(`_RLT_GraphClaForestMultiFit`, X, Y, Ncat, param, RLTparam, obsweight, varweight, usecores, verbose, ObsTrack)
 }
 
-GraphClaForestMultiPred <- function(NodeType, SplitLoading, SplitValue, LeftNode, RightNode, NodeSize, NodeAve, X, Ncat, treeindex, keep_all, usecores, verbose) {
-    .Call(`_RLT_GraphClaForestMultiPred`, NodeType, SplitLoading, SplitValue, LeftNode, RightNode, NodeSize, NodeAve, X, Ncat, treeindex, keep_all, usecores, verbose)
+GraphClaForestMultiPred <- function(NodeType, SplitVar, SplitLoading, SplitValue, LeftNode, RightNode, NodeSize, NodeAve, X, Ncat, treeindex, keep_all, usecores, verbose) {
+    .Call(`_RLT_GraphClaForestMultiPred`, NodeType, SplitVar, SplitLoading, SplitValue, LeftNode, RightNode, NodeSize, NodeAve, X, Ncat, treeindex, keep_all, usecores, verbose)
 }
 
 RegForestUniFit <- function(X, Y, Ncat, param, RLTparam, obsweight, varweight, usecores, verbose, ObsTrack) {

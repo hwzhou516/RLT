@@ -7,7 +7,7 @@
 # include "../RLT.h"
 # include "../Trees//Trees.h"
 # include "../Utility/Utility.h"
-# include "../regForest.h"
+# include "../GraphClaForest.h"
 
 using namespace Rcpp;
 using namespace arma;
@@ -40,6 +40,7 @@ void Cla_Multi_Forest_Pred(mat& Pred,
       size_t whichtree = treeindex(nt);
         
       Cla_Multi_Tree_Class OneTree(CLA_FOREST.NodeTypeList(nt), 
+                                   CLA_FOREST.SplitVarList(nt),
                                    CLA_FOREST.SplitLoadingList(nt),
                                    CLA_FOREST.SplitValueList(nt),
                                    CLA_FOREST.LeftNodeList(nt),
@@ -47,7 +48,7 @@ void Cla_Multi_Forest_Pred(mat& Pred,
                                    CLA_FOREST.NodeSizeList(nt),
                                    CLA_FOREST.NodeAveList(nt));
       
-      Uni_Find_Terminal_Node(0, OneTree, X, Ncat, proxy_id, real_id, TermNode);
+      Multi_Find_Terminal_Node(0, OneTree, X, Ncat, proxy_id, real_id, TermNode);
       
       Pred.unsafe_col(nt).rows(real_id) = OneTree.NodeAve(TermNode);
     }
