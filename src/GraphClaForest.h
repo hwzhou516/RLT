@@ -57,6 +57,7 @@ void Graph_Cla_Terminate_Node(size_t Node,
                               const PARAM_GLOBAL& Param,
                               bool useobsweight);
 
+
 void Graph_Find_A_Split(Multi_Split_Class& OneSplit,
                         const RLT_CLA_DATA& CLA_DATA,
                         const PARAM_GLOBAL& Param,
@@ -65,8 +66,7 @@ void Graph_Find_A_Split(Multi_Split_Class& OneSplit,
                         uvec& var_id);
 
 void Graph_Cla_Split(Multi_Split_Class& TempSplit,
-                     uvec& obs_id,
-                     const vec& x,
+                     const vec& x, // x and Y are same length as obs_id 
                      const uvec& Y,
                      double penalty,
                      int split_gen,
@@ -76,8 +76,12 @@ void Graph_Cla_Split(Multi_Split_Class& TempSplit,
                      double alpha);
 
 double graph_cla_score_gini(uvec& indices,
-                              const uvec& Y,
-                              size_t temp_ind);
+                            const uvec& Y,
+                            size_t& k);
+
+double cla_unsuper_score_var(uvec& indices,
+                             const vec& x,
+                             size_t& k);
 
 void Cla_Multi_Forest_Pred(mat& Pred,
                            const Cla_Multi_Forest_Class& CLA_FOREST,

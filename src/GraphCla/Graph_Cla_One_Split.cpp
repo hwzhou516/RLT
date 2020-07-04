@@ -34,7 +34,7 @@ void Graph_Cla_Split(Multi_Split_Class& TempSplit,
   
   // best split, check all splitting point 
   
-  for(int k=0; k < N-1; k++){
+  for(size_t k=0; k < N-1; k++){
 
     // get the cut-off point based on the variance
     temp_score = graph_cla_score_gini(indices, Y, k);
@@ -55,7 +55,7 @@ double graph_cla_score_gini(uvec& indices,
   DEBUG_Rcout <<" --- Supervised with Gini score --- "<< std::endl;
   
   double score = 0;
-  int N = indices.n_elem;
+  size_t N = indices.n_elem;
     
   double leftmean = arma::mean(Y( indices.subvec(0, k) ));
   double rightmean = arma::mean(Y( indices.subvec(k+1, N) ));  
@@ -67,7 +67,7 @@ double graph_cla_score_gini(uvec& indices,
 
 double cla_unsuper_score_var(uvec& indices,
                              const vec& x,
-                             size_t temp_ind)
+                             size_t& k)
 {
   DEBUG_Rcout << " --- UnSupervised with Variance score --- "<< std::endl;
   

@@ -81,7 +81,6 @@ void Graph_Find_A_Split(Multi_Split_Class& OneSplit,
     TempSplit.score = -1;
       
     Graph_Cla_Split(TempSplit, 
-                    obs_id, 
                     U.unsafe_col(j),
                     Y,
                     0.0, // penalty

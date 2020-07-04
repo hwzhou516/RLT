@@ -41,7 +41,8 @@ List EofVar(arma::umat& ObsTrack,
     for (size_t i = 0; i < (ntrees - 1); i++){
     for (size_t j = i+1; j < ntrees; j++){
       
-      uvec pair = {i, j};
+      uvec pair(2);
+      pair(0) = i; pair(1) = j;
         
       if ( sum( min(ObsTrack.cols(pair), 1) ) == C(l) )
       {
