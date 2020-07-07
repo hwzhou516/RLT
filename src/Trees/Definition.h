@@ -34,7 +34,6 @@ public:
   int importance;  
   bool reinforcement;
   bool obs_track;
-  bool spectrum; // indicator of spectrum clustering and transformation of X
   size_t seed;
   
   PARAM_GLOBAL(List& param){
@@ -54,7 +53,6 @@ public:
     importance    = param["importance"];
     reinforcement = param["reinforcement"];
     obs_track     = param["track.obs"];
-    spectrum      = param["spectrum"];
     seed          = param["seed"];
   }
   
@@ -75,7 +73,6 @@ void  copyfrom(const PARAM_GLOBAL& Input){
     importance    = Input.importance;
     reinforcement = Input.reinforcement;
     obs_track     = Input.obs_track;
-    spectrum      = Input.spectrum;
     seed          = Input.seed;
   }
   

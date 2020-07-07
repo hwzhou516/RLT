@@ -5,8 +5,8 @@ library(ranger)
 
 set.seed(1)
 n = 1500
-trainn = 1000
-testn = 500
+trainn = 100
+testn = 50
 
 ntrees = 200
 ncores = 10
@@ -33,11 +33,11 @@ colnames(metric) = c("fit.time", "pred.time", "pred.error", "obj.size")
 
 
 start_time <- Sys.time()
-#RLTfit <- 
-  RLT(trainX, trainY, ntrees = ntrees, ncores = ncores, nmin = nmin/2, mtry = mtry,
+RLTfit <- RLT(trainX, trainY, ntrees = ntrees, ncores = ncores, nmin = nmin/2, mtry = mtry,
                          split.gen = rule, nsplit = nsplit, resample.prob = sampleprob, importance = importance)
 metric = difftime(Sys.time(), start_time, units = "secs")
 start_time <- Sys.time()
+RLTPred <- predict(RLTfit, testX, ncores = ncores)
 
 metric
 

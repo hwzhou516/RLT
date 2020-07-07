@@ -40,6 +40,9 @@ void Graph_Cla_Forest_Build(const RLT_CLA_DATA& CLA_DATA,
    
    #pragma omp parallel num_threads(usecores)
    {
+     //dqrng::xoshiro256plus lrng(rng);      // make thread local copy of rng 
+     //lrng.long_jump(omp_get_thread_num() + 1);  // advance rng by 1 ... ncores jumps
+      #pragma omp for schedule(static)
       for(size_t nt=0; nt < ntrees; nt++)
       {
         Cla_Multi_Tree_Class OneTree(CLA_FOREST.NodeTypeList(nt), 

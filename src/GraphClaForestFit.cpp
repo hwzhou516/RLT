@@ -31,9 +31,6 @@ List GraphClaForestMultiFit(arma::mat& X,
   PARAM_RLT Param_RLT(RLTparam);
   if (verbose and Param.reinforcement) Param_RLT.print();
   
-  if(Param.spectrum ==1){
-    
-  }
   
   // create data objects  
   RLT_CLA_DATA CLA_DATA(X, Y, Ncat, obsweight, varweight);
@@ -64,11 +61,11 @@ List GraphClaForestMultiFit(arma::mat& X,
   arma::field<arma::vec> NodeAve(ntrees);
   
   Cla_Multi_Forest_Class CLA_FOREST(NodeType,SplitVarList, SplitLoading, SplitValue, LeftNode, RightNode, NodeSize, NodeAve);
-
+  
   // initiate obs id and var id
   uvec obs_id = linspace<uvec>(0, N-1, N);
   uvec var_id = linspace<uvec>(0, P-1, P);
-
+  
   Graph_Cla_Forest_Build((const RLT_CLA_DATA&) CLA_DATA,
                          CLA_FOREST,
                          (const PARAM_GLOBAL&) Param,
@@ -98,4 +95,5 @@ List GraphClaForestMultiFit(arma::mat& X,
   
   
   return ReturnList;
+  
 }

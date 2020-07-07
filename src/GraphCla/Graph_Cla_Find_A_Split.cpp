@@ -31,22 +31,22 @@ void Graph_Find_A_Split(Multi_Split_Class& OneSplit,
   mtry = ( (mtry <= P) ? mtry:P ); // take minimum
   
   DEBUG_Rcout << " --- Reg_Find_A_Split with mtry = " << mtry << std::endl;
-  
   // SVD Decomposition
   int method = 1;
-  arma::mat A;
-  
+  arma::mat A(N,N);
   if (method == 1) // submatrix col same as rows
-    arma::mat A = CLA_DATA.X(obs_id, obs_id);
+     A = CLA_DATA.X(obs_id, obs_id);
   
   if (method == 2) // use all cols 
   {
     if (mtry == P)
     {
-      arma::mat A = CLA_DATA.X(obs_id, var_id);
+      A.set_size(N,P);
+      A = CLA_DATA.X(obs_id, var_id);
     }else{
         uvec var_try = arma::randperm(P, mtry);
-        arma::mat A = CLA_DATA.X(obs_id, var_id(var_try));      
+        A.set_size(N,mtry); 
+        A = CLA_DATA.X(obs_id, var_id(var_try));      
       
     }
   }
@@ -54,17 +54,15 @@ void Graph_Find_A_Split(Multi_Split_Class& OneSplit,
   if (method == 3) // laplacian
   {
     // redefine A = laplacian
-    //arma::mat A = CLA_DATA.X(obs_id, var_id);
+    arma::mat A = CLA_DATA.X(obs_id, var_id);
     //A = diagmat(A.each_row( [ ](vec& a){ sum(a); } )) - A;
-    //DEBUG_Rcout << " laplacian not done yet " << std::endl;
+    DEBUG_Rcout << " laplacian not done yet " << std::endl;
   }
   
   // Centering
-  
   // SVD Decomposition
   arma::mat U; arma::mat V; arma::vec s;
   svd(U,s,V,A);
-  
   // Tempmat contains the first k principle component
   // TempLoading contains the corresponding vector
   
@@ -75,20 +73,12 @@ void Graph_Find_A_Split(Multi_Split_Class& OneSplit,
   // select the best variable
   for(size_t j = 0; j < k; j++)
   {
-    arma::vec TempLoad = V.col(j)/s(j);
+    arma::vec TempLoad = V.unsafe_col(j);
     Multi_Split_Class TempSplit(TempLoad);
     TempSplit.value = 0;
     TempSplit.score = -1;
       
-    Graph_Cla_Split(TempSplit, 
-                    U.unsafe_col(j),
-                    Y,
-                    0.0, // penalty
-                    split_gen, 
-                    split_rule, 
-                    nsplit, 
-                    nmin, 
-                    alpha);
+    
     
     if (TempSplit.score > OneSplit.score)
     {

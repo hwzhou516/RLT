@@ -26,18 +26,18 @@ void Graph_Cla_Split_A_Node(size_t Node,
   bool useobsweight = Param.useobsweight;
   
   if (N < 2*nmin){
-TERMINATENODE:
+    TERMINATENODE:
     DEBUG_Rcout << "  -- Terminate node --" << Node << std::endl;
-    Graph_Cla_Terminate_Node(Node, OneTree, obs_id, CLA_DATA.Y, CLA_DATA.obsweight, Param, useobsweight); //*  
+    Graph_Cla_Terminate_Node(Node, OneTree, obs_id, CLA_DATA.Y, CLA_DATA.obsweight, Param, useobsweight); 
   }else{
     DEBUG_Rcout << "  -- Do split --" << std::endl;
     
-    arma::vec Loading(P);
+    arma::vec Loading = zeros<vec>(N); 
     Multi_Split_Class OneSplit(Loading);
     
-    Graph_Find_A_Split(OneSplit, CLA_DATA, Param, Param_RLT, obs_id, var_id); // *
+    Graph_Find_A_Split(OneSplit, CLA_DATA, Param, Param_RLT, obs_id, var_id);
     
-    DEBUG_Rcout << "-- Found split on variable --" << OneSplit.Loading << " cut " << OneSplit.value << "Var" << obs_id << std::endl;
+    //DEBUG_Rcout << "-- Found split on variable --" << OneSplit.Loading << " cut " << OneSplit.value << "Var" << obs_id << std::endl;
     
     // store proportion
     OneTree.NodeAve(Node) = arma::mean(CLA_DATA.Y(obs_id));
@@ -47,7 +47,7 @@ TERMINATENODE:
       goto TERMINATENODE;
     
     // construct indices for left and right nodes
-    DEBUG_Rcout << "  -- splitting value is --" << OneSplit.value << std::endl;
+    //DEBUG_Rcout << "  -- splitting value is --" << OneSplit.value << std::endl;
     
     uvec left_id(N);
     
@@ -102,7 +102,7 @@ TERMINATENODE:
                            Param,
                            Param_RLT,
                            left_id,
-                           var_id);
+                           left_id);
     
     Graph_Cla_Split_A_Node(NextRight,                          
                            OneTree,
@@ -110,7 +110,7 @@ TERMINATENODE:
                            Param,
                            Param_RLT, 
                            obs_id, 
-                           var_id);
+                           obs_id);
   }
 }
 

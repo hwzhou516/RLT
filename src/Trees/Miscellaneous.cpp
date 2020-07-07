@@ -243,6 +243,7 @@ void split_id_cat(const vec& x, double value, uvec& left_id, uvec& obs_id, size_
 
 void split_id_multi(const mat& X, const vec& Loading, double value, uvec& left_id, uvec& obs_id) // obs_id will be treated as the right node
 {
+  
   vec x = X * Loading;
   size_t RightN = obs_id.n_elem - 1;
   size_t LeftN = 0;
