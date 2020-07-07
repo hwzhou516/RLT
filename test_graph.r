@@ -5,9 +5,8 @@ library(ranger)
 
 set.seed(1)
 n = 1500
-p = 100
-x = matrix(rnorm(n*p/2), n, n)
-y = as.factor(sample(c(0,1),n,replace = TRUE))
+trainn = 1000
+testn = 500
 
 ntrees = 200
 ncores = 10
@@ -18,8 +17,11 @@ rule = "best"
 nsplit = ifelse(rule == "best", 0, 3)
 importance = FALSE
 
-testX = X[1:testn + trainn, ]
-testY = y[1:testn + trainn]
+trainX = matrix(rnorm(trainn*trainn), trainn, trainn)
+trainY = as.vector(sample(c(0,1), trainn,replace = TRUE))
+
+testX = matrix(rnorm(testn*testn), testn, testn)
+testY = as.vector(sample(c(0,1), testn,replace = TRUE))
 
 xorder = order(testX[, 1])
 testX = testX[xorder, ]
@@ -31,11 +33,9 @@ colnames(metric) = c("fit.time", "pred.time", "pred.error", "obj.size")
 
 
 start_time <- Sys.time()
-RLTfit <- GraphClaForest(x, y, ncat,
-                         param, RLT.control,
-                         obs.w, var.w,
-                         ncores, verbose,
-                         ObsTrack)
+#RLTfit <- 
+  RLT(trainX, trainY, ntrees = ntrees, ncores = ncores, nmin = nmin/2, mtry = mtry,
+                         split.gen = rule, nsplit = nsplit, resample.prob = sampleprob, importance = importance)
 metric = difftime(Sys.time(), start_time, units = "secs")
 start_time <- Sys.time()
 

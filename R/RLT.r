@@ -112,25 +112,25 @@
 
 RLT <- function(x, y, censor = NULL, model = NULL, 
                 reinforcement = FALSE,
-        				ntrees = if (reinforcement) 100 else 500,
-        				mtry = max(1, as.integer(ncol(x)/3)),
-        				nmin = max(1, as.integer(log(nrow(x)))),
-        				alpha = 0,
-        				split.gen = "random",
-        				split.rule = NULL,
-        				nsplit = 1,
-        				replacement = TRUE,
-        				resample.prob = if(replacement) 1 else 0.85,
-        				obs.w = NULL,
-        				var.w = NULL,
-        				importance = FALSE,
-        				track.obs = FALSE,
-        				ObsTrack = NULL,
-        				RLT.control = list(),
-        				seed = NaN,
-        				ncores = 1,
-        				verbose = 0,
-        				...)
+                ntrees = if (reinforcement) 100 else 500,
+                mtry = max(1, as.integer(ncol(x)/3)),
+                nmin = max(1, as.integer(log(nrow(x)))),
+                alpha = 0,
+                split.gen = "random",
+                split.rule = NULL,
+                nsplit = 1,
+                replacement = TRUE,
+                resample.prob = if(replacement) 1 else 0.85,
+                obs.w = NULL,
+                var.w = NULL,
+                importance = FALSE,
+                track.obs = FALSE,
+                ObsTrack = NULL,
+                RLT.control = list(),
+                seed = NaN,
+                ncores = 1,
+                verbose = 0,
+                ...)
 {
   # check inputs
   
@@ -138,11 +138,11 @@ RLT <- function(x, y, censor = NULL, model = NULL,
   if (missing(y)) stop("y is missing")
   
   # check model type
-  model = "classificaiton" #check_input(x, y, censor, model)
-
+  model = check_input(x, y, censor, model)
+  
   p = ncol(x)
   n = nrow(x)
-
+  
   # check RF parameters
   param <- check_param(n, p, ntrees, 
                        mtry, nmin, alpha, 
@@ -152,39 +152,37 @@ RLT <- function(x, y, censor = NULL, model = NULL,
                        track.obs)
   
   # check RLT parameters
-  if (reinforcement)
-  {
-    RLT.control <- check_RLT_param(RLT.control)
-  }
-
+  
+  RLT.control <- check_RLT_param(RLT.control)
+  
   # check ObsTrack
   if ( !is.null(ObsTrack) )
   {
-      if (!is.matrix(ObsTrack))
-          stop("ObsTrack must be a matrix")
-      
-      if (nrow(ObsTrack) != n | ncol(ObsTrack) != ntrees)
-          stop("Dimension of ObsTrack does not match n by ntrees")
-      
-      if (any(ObsTrack < 0))
-      {
-          warning("Negative entries in ObsTrack are truncated to 0")
-          ObsTrack[ObsTrack < 0] = 0;
-      }
-      
-      if ( any(colSums(ObsTrack) > n) )
-      {
-          stop("Column sums in ObsTrack cannot be larger than n ...")
-      }
-      
-      param$'use.obs.w' = TRUE
-      
-      storage.mode(ObsTrack) <- "integer"
-      
+    if (!is.matrix(ObsTrack))
+      stop("ObsTrack must be a matrix")
+    
+    if (nrow(ObsTrack) != n | ncol(ObsTrack) != ntrees)
+      stop("Dimension of ObsTrack does not match n by ntrees")
+    
+    if (any(ObsTrack < 0))
+    {
+      warning("Negative entries in ObsTrack are truncated to 0")
+      ObsTrack[ObsTrack < 0] = 0;
+    }
+    
+    if ( any(colSums(ObsTrack) > n) )
+    {
+      stop("Column sums in ObsTrack cannot be larger than n ...")
+    }
+    
+    param$'use.obs.w' = TRUE
+    
+    storage.mode(ObsTrack) <- "integer"
+    
   }else{
-      ObsTrack = ARMA_EMPTY_UMAT();
+    ObsTrack = ARMA_EMPTY_UMAT();
   }
-
+  
   # check observation weights  
   if (is.null(obs.w))
   {
@@ -254,49 +252,37 @@ RLT <- function(x, y, censor = NULL, model = NULL,
   
   if (is.na(seed))
     seed = .Machine$integer.max * runif(1)
-
-  param$"seed" = as.integer(seed)
-    
-    # fit model
-    
-    if (model == "regression")
-    {
-        RLT.fit = RegForest(x, y, ncat,
-                            param, RLT.control,
-                            obs.w, var.w,
-                            ncores, verbose,
-                            ObsTrack,
-                            ...)
-    }
   
-    if (model == "survival")
-    {
-        cat(" run survival forest ")
-        
-        RLT.fit = SurvForest(x, y, censor, ncat,
-                             param, RLT.control,
-                             obs.w, var.w,
-                             ncores, verbose,
-                             ObsTrack,
-                             ...)
-    }
-   if(model == "classification")
-   {
-    cat("run classification forest")
+  param$"seed" = as.integer(seed)
+  
+  # fit model
+  
+  if (model == "regression")
+  {
+    RLT.fit = RegForest(x, y, ncat,
+                        param, RLT.control,
+                        obs.w, var.w,
+                        ncores, verbose,
+                        ObsTrack,
+                        ...)
+  }
+  
+  if (model == "survival")
+  {
+    cat(" run survival forest ")
     
-    RLT.fit = GraphClaForest(x, y, censor, ncat,
-                             param, RLT.control,
-                             obs.w, var.w,
-                             ncores, verbose,
-                             ObsTrack,
-                             ...)
-   }
-
-
+    RLT.fit = SurvForest(x, y, censor, ncat,
+                         param, RLT.control,
+                         obs.w, var.w,
+                         ncores, verbose,
+                         ObsTrack,
+                         ...)
+  }
+  
   RLT.fit$"xnames" = xnames
   
   if (importance == TRUE)
     rownames(RLT.fit$"VarImp") = xnames
-    
+  
   return(RLT.fit)
 }

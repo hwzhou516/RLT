@@ -18,10 +18,10 @@ GraphClaForest <- function(x, y,
   #storage.mode(y) <- "double"
   
   # check splitting rule 
-  all.split.rule = c("var")
+  #all.split.rule = c("var")
   
-  param$"split.rule" <- match.arg(param$"split.rule", all.split.rule)
-  param$"split.rule" <- match(param$"split.rule", all.split.rule)
+  #param$"split.rule" <- match.arg(param$"split.rule", all.split.rule)
+  #param$"split.rule" <- match(param$"split.rule", all.split.rule)
   
   # fit model
   fit = GraphClaForestMultiFit(x, y, ncat,
