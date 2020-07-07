@@ -103,4 +103,40 @@ predict.RLT<- function(object,
     class(pred) <- c("RLT", "pred", "surv")
     return(pred)
   }
+  
+  if( class(object)[2] == "fit" &  class(object)[3] == "graphcla" )
+  {
+    # check test data 
+    
+    if (is.null(colnames(testx)))
+    {
+      if (ncol(testx) != object$parameters$p) stop("test data dimension does not match training data, variable names are not supplied...")
+    }else if (any(colnames(testx) != object$variablenames)){
+      
+      warning("test data variables names does not match training data...")
+      varmatch = match(object$variablenames, colnames(testx))
+      if (any(is.na(varmatch))) stop("test data missing some variables...")
+      testx = testx[, varmatch]
+    }
+    
+    testx <- data.matrix(testx)
+    
+    pred <- GraphClaForestMultiPred(object$FittedForest$NodeType,
+                             object$FittedForest$SplitVar,
+                             object$FittedForest$SplitLoading,
+                             object$FittedForest$SplitValue,
+                             object$FittedForest$LeftNode,
+                             object$FittedForest$RightNode,
+                             object$FittedForest$NodeSize,                             
+                             object$FittedForest$NodeAve,
+                             testx,
+                             object$ncat,
+                             treeindex,
+                             keep.all,
+                             ncores,
+                             verbose)
+    
+    class(pred) <- c("RLT", "pred", "reg")
+    return(pred) 
+  }
 }

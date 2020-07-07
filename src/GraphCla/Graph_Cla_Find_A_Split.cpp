@@ -69,22 +69,31 @@ void Graph_Find_A_Split(Multi_Split_Class& OneSplit,
   size_t k = 2;
   
   arma::uvec Y = CLA_DATA.Y(obs_id);
-    
+
   // select the best variable
   for(size_t j = 0; j < k; j++)
   {
-    arma::vec TempLoad = V.unsafe_col(j);
+    arma::vec TempLoad = V.unsafe_col(j)/s(j);
     Multi_Split_Class TempSplit(TempLoad);
     TempSplit.value = 0;
     TempSplit.score = -1;
       
-    
+    Graph_Cla_Split(TempSplit, 
+                        U.unsafe_col(j), 
+                        Y, 
+                        0.0, // penalty
+                        split_gen, 
+                        split_rule, 
+                        nsplit, 
+                        nmin, 
+                        alpha);
     
     if (TempSplit.score > OneSplit.score)
     {
-      OneSplit.Loading = TempSplit.Loading;
-      OneSplit.value = TempSplit.value;
-      OneSplit.score = TempSplit.score;
+      std::cout << TempSplit.score<<endl;
+    //  OneSplit.Loading = TempSplit.Loading;
+     //   OneSplit.value = TempSplit.value;
+     //   OneSplit.score = TempSplit.score;
     }
   }
 }

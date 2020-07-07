@@ -20,7 +20,7 @@ importance = FALSE
 trainX = matrix(rnorm(trainn*trainn), trainn, trainn)
 trainY = as.vector(sample(c(0,1), trainn,replace = TRUE))
 
-testX = matrix(rnorm(testn*testn), testn, testn)
+testX = matrix(rnorm(testn*testn), testn, trainn)
 testY = as.vector(sample(c(0,1), testn,replace = TRUE))
 
 xorder = order(testX[, 1])
