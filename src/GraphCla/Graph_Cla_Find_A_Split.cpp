@@ -33,20 +33,25 @@ void Graph_Find_A_Split(Multi_Split_Class& OneSplit,
   DEBUG_Rcout << " --- Reg_Find_A_Split with mtry = " << mtry << std::endl;
   // SVD Decomposition
   int method = 1;
-  arma::mat A(N,N);
-  if (method == 1) // submatrix col same as rows
+  arma::mat A;
+  
+  if (method == 1) 
+  {// submatrix col same as rows
      A = CLA_DATA.X(obs_id, obs_id);
+     OneSplit.SplitVar = (obs_id);
+  }
   
   if (method == 2) // use all cols 
   {
     if (mtry == P)
     {
-      A.set_size(N,P);
       A = CLA_DATA.X(obs_id, var_id);
+      OneSplit.SplitVar = var_id;
+      
     }else{
         uvec var_try = arma::randperm(P, mtry);
-        A.set_size(N,mtry); 
-        A = CLA_DATA.X(obs_id, var_id(var_try));      
+        A = CLA_DATA.X(obs_id, var_id(var_try));  
+        OneSplit.SplitVar = var_id(var_try);
       
     }
   }
@@ -68,19 +73,20 @@ void Graph_Find_A_Split(Multi_Split_Class& OneSplit,
   
   size_t k = 2;
   
-  arma::uvec Y = CLA_DATA.Y(obs_id);
-
+  arma::uvec y = CLA_DATA.Y(obs_id);
+  
   // select the best variable
   for(size_t j = 0; j < k; j++)
   {
     arma::vec TempLoad = V.unsafe_col(j)/s(j);
-    Multi_Split_Class TempSplit(TempLoad);
+    arma::uvec TempSplitVar;
+    Multi_Split_Class TempSplit(TempLoad, TempSplitVar);
     TempSplit.value = 0;
     TempSplit.score = -1;
-      
+     
     Graph_Cla_Split(TempSplit, 
                         U.unsafe_col(j), 
-                        Y, 
+                        y, 
                         0.0, // penalty
                         split_gen, 
                         split_rule, 
@@ -90,10 +96,12 @@ void Graph_Find_A_Split(Multi_Split_Class& OneSplit,
     
     if (TempSplit.score > OneSplit.score)
     {
-      std::cout << TempSplit.score<<endl;
-    //  OneSplit.Loading = TempSplit.Loading;
-     //   OneSplit.value = TempSplit.value;
-     //   OneSplit.score = TempSplit.score;
+      OneSplit.Loading = TempSplit.Loading;
+      OneSplit.value = TempSplit.value;
+      OneSplit.score = TempSplit.score;
     }
+     
   }
+
+
 }
