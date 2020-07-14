@@ -245,7 +245,7 @@ void split_id_cat(const vec& x, double value, uvec& left_id, uvec& obs_id, size_
 void split_id_multi(const mat& X, const Multi_Split_Class& OneSplit, uvec& left_id, uvec& obs_id) // obs_id will be treated as the right node
 {
   double value = OneSplit.value;
-  vec x = X(obs_id, OneSplit.SplitVar) * OneSplit.Loading;
+  vec x = X.cols(OneSplit.SplitVar) * OneSplit.Loading;
   size_t RightN = obs_id.n_elem - 1;
   size_t LeftN = 0;
   size_t i = 0;
@@ -261,7 +261,7 @@ void split_id_multi(const mat& X, const Multi_Split_Class& OneSplit, uvec& left_
       obs_id(i) = obs_id( RightN--);
     }else{
       i++;
-    }
+   }
   }
   
   left_id.resize(LeftN);

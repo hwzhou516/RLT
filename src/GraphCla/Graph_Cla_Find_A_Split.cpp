@@ -38,7 +38,7 @@ void Graph_Find_A_Split(Multi_Split_Class& OneSplit,
   if (method == 1) 
   {// submatrix col same as rows
      A = CLA_DATA.X(obs_id, obs_id);
-     OneSplit.SplitVar = (obs_id);
+     OneSplit.SplitVar = obs_id;
   }
   
   if (method == 2) // use all cols 
@@ -74,7 +74,7 @@ void Graph_Find_A_Split(Multi_Split_Class& OneSplit,
   size_t k = 2;
   
   arma::uvec y = CLA_DATA.Y(obs_id);
-  
+
   // select the best variable
   for(size_t j = 0; j < k; j++)
   {

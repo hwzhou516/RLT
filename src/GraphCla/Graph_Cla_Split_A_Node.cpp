@@ -50,11 +50,12 @@ TERMINATENODE:
     // construct indices for left and right nodes
     
     uvec left_id(N);
-    
+    //cout << CLA_DATA.X(obs_id, OneSplit.SplitVar) * OneSplit.Loading << endl;
+    //cout << "split value: " << OneSplit.value << endl;
     split_id_multi(CLA_DATA.X, OneSplit, left_id, obs_id);  // get the left and right id
-    DEBUG_Rcout << " split at " << OneSplit.value << std::endl;
-    //std::cout << "leftNum: "<< left_id.n_elem <<" rightNum: "<< obs_id.n_elem << endl;
-    cout << CLA_DATA.X(obs_id, OneSplit.SplitVar) * OneSplit.Loading << endl;
+    //DEBUG_Rcout << " split at " << OneSplit.value << std::endl;
+    std::cout << "leftNum: "<< left_id.n_elem <<" rightNum: "<< obs_id.n_elem << endl;
+    
     // if this happens something about the splitting rule is wrong
     if (left_id.n_elem == N or obs_id.n_elem == N)
       goto TERMINATENODE;
@@ -89,7 +90,7 @@ TERMINATENODE:
     OneTree.NodeSize(Node) = left_id.n_elem + obs_id.n_elem;
     //cout << left_id << endl;
     // split the left and right nodes 
-    
+   
     Graph_Cla_Split_A_Node(NextLeft,
                            OneTree,
                            CLA_DATA,
@@ -105,7 +106,7 @@ TERMINATENODE:
                            Param_RLT, 
                            obs_id, 
                            var_id);
-    
+   
   }
 }
 
