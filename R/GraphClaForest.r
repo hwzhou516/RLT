@@ -15,7 +15,7 @@ GraphClaForest <- function(x, y,
                            ...)
 {
   # prepare y
-  storage.mode(y) <- "double"
+  storage.mode(y) <- "integer"
   
   # check splitting rule 
   all.split.rule = c("var")

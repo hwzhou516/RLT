@@ -45,6 +45,10 @@ void Graph_Cla_Forest_Build(const RLT_CLA_DATA& CLA_DATA,
       #pragma omp for schedule(static)
       for(size_t nt=0; nt < ntrees; nt++)
       {
+        uvec inbagObs;
+        
+        inbagObs = obs_id;
+        
         Cla_Multi_Tree_Class OneTree(CLA_FOREST.NodeTypeList(nt), 
                                      CLA_FOREST.SplitVarList(nt),
                                      CLA_FOREST.SplitLoadingList(nt),
@@ -55,12 +59,16 @@ void Graph_Cla_Forest_Build(const RLT_CLA_DATA& CLA_DATA,
                                      CLA_FOREST.NodeAveList(nt));
         
         size_t TreeLength = 1 + size/nmin*3;
+        
         OneTree.initiate(TreeLength);
         
+        //cout << nt <<" th forest build:" << obs_id.n_elem << endl;
         // start to fit a tree
         // 0: unused, 1: reserved; 2: internal node; 3: terminal node
         OneTree.NodeType(0) = 1;
-        Graph_Cla_Split_A_Node(0, OneTree, CLA_DATA, Param, Param_RLT, obs_id, var_id);
+        
+        Graph_Cla_Split_A_Node(0, OneTree, CLA_DATA, Param, Param_RLT, 
+                               inbagObs, var_id);
         
         // trim tree 
         TreeLength = OneTree.get_tree_length();

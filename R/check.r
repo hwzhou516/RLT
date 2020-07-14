@@ -130,7 +130,7 @@ check_RLT_param <- function(control)
 check_input <- function(x, y, censor, model)
 {
   if (!is.matrix(x) & !is.data.frame(x)) stop("x must be a matrix or a data.frame")
-  if (!is.vector(y)) stop("y must be a vector")
+  if (!is.vector(y) & !is.factor(y)) stop("y must be a vector or factor")
   
   if (any(is.na(x))) stop("NA not permitted in x")
   if (any(is.na(y))) stop("NA not permitted in y")

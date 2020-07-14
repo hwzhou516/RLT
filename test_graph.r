@@ -8,20 +8,20 @@ n = 1500
 trainn = 100
 testn = 50
 
-ntrees = 200
-ncores = 10
-nmin = 20
-mtry = p
+ntrees = 100
+ncores = 1
+nmin = 10
+mtry = 100
 sampleprob = 0.85
 rule = "best"
 nsplit = ifelse(rule == "best", 0, 3)
 importance = FALSE
 
 trainX = matrix(rnorm(trainn*trainn), trainn, trainn)
-trainY = as.vector(sample(c(0,1), trainn,replace = TRUE))
+trainY = as.factor(sample(c(0,1), trainn,replace = TRUE))
 
 testX = matrix(rnorm(testn*testn), testn, trainn)
-testY = as.vector(sample(c(0,1), testn,replace = TRUE))
+testY = as.factor(sample(c(0,1), testn,replace = TRUE))
 
 xorder = order(testX[, 1])
 testX = testX[xorder, ]

@@ -138,7 +138,7 @@ RLT <- function(x, y, censor = NULL, model = NULL,
   if (missing(y)) stop("y is missing")
   
   # check model type
-  model = "classification"#check_input(x, y, censor, model)
+  model = check_input(x, y, censor, model)
 
   p = ncol(x)
   n = nrow(x)

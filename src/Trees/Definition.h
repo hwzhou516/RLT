@@ -640,10 +640,13 @@ public:
 class Multi_Split_Class{ // Multi-variate splits
 public:
   arma::vec& Loading;
+  arma::uvec& SplitVar;
   double value = 0;
   double score = -1;
   
-  Multi_Split_Class(arma::vec& Loading): Loading(Loading){}
+  Multi_Split_Class(arma::vec& Loading,
+                    arma::uvec& SplitVar): Loading(Loading),
+                                           SplitVar(SplitVar){}
   
   void print(void) {
     Rcout << "Splitting loading is " << Loading << " value is " << value << " score is " << score << std::endl;

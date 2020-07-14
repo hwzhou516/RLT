@@ -214,7 +214,7 @@ void split_id_cat(const vec& x, double value, uvec& left_id, uvec& obs_id, size_
 {
   uvec goright(ncat + 1, fill::zeros); // the first (0-th) element (category) of goright will always be set to 0 --- go left, but this category does not exist.
   unpack(value, ncat + 1, goright);
-
+  
   DEBUG_Rcout << "    --- at split_id_cat, value is" <<  value << " ncat is " << ncat << ", goright is " << goright << " (continuous)" << std::endl;
   
   size_t RightN = obs_id.n_elem - 1;
@@ -241,10 +241,11 @@ void split_id_cat(const vec& x, double value, uvec& left_id, uvec& obs_id, size_
   obs_id.resize(RightN+1);
 }
 
-void split_id_multi(const mat& X, const vec& Loading, double value, uvec& left_id, uvec& obs_id) // obs_id will be treated as the right node
+
+void split_id_multi(const mat& X, const Multi_Split_Class& OneSplit, uvec& left_id, uvec& obs_id) // obs_id will be treated as the right node
 {
-  
-  vec x = X * Loading;
+  double value = OneSplit.value;
+  vec x = X(obs_id, OneSplit.SplitVar) * OneSplit.Loading;
   size_t RightN = obs_id.n_elem - 1;
   size_t LeftN = 0;
   size_t i = 0;
@@ -265,6 +266,7 @@ void split_id_multi(const mat& X, const vec& Loading, double value, uvec& left_i
   
   left_id.resize(LeftN);
   obs_id.resize(RightN+1);
+  
 }
 
 // ****************//

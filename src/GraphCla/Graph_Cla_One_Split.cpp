@@ -26,18 +26,19 @@ void Graph_Cla_Split(Multi_Split_Class& TempSplit,
   
   double temp_score;
   
-  uvec indices = linspace<uvec>(0, N);
+  uvec indices = linspace<uvec>(0, N-1,N);
   indices = indices(sort_index(x)); // this is the sorted obs_id
   
   // check identical 
   if ( x(indices(0)) == x(indices(N-1)) ) return;
   
   // best split, check all splitting point 
+  uvec y = Y(indices);
   
   for(size_t k = 0; k < N-1; k++){
 
     // get the cut-off point based on the variance
-    temp_score = graph_cla_score_gini(indices, Y, k);
+    temp_score = graph_cla_score_gini(indices, y, k);
     
     if (temp_score > TempSplit.score){
         TempSplit.value = (x(indices(k)) + x(indices(k+1)))/2;
@@ -45,6 +46,7 @@ void Graph_Cla_Split(Multi_Split_Class& TempSplit,
     }
     
   }
+   
   return;
 }
 
@@ -55,13 +57,20 @@ double graph_cla_score_gini(uvec& indices,
 {
   DEBUG_Rcout <<" --- Supervised with Gini score --- "<< std::endl;
   
-  double score = 0;
   size_t N = indices.n_elem;
+  double left = 0; double right =0;
   
-  double leftmean = arma::mean(Y( linspace<uvec>(0,k,k+1) ));
-  double rightmean = arma::mean(Y( linspace<uvec>(k+1, N-1, N-k-1) ));  
+  for(size_t i = 0; i <= k; i++){
+    if(Y(i) == Y(0)) left++;
+  }
+  for(size_t i = k+1; i <= N-1; i++){
+    if(Y(i) == Y(0)) right++;
+  }
   
-  double gini = (k+1)*leftmean*(1-leftmean) + (N-k-1)*rightmean*(1-rightmean);
+  double leftmean = left/(k+1); //arma::mean(Y( linspace<uvec>(0,k,k+1) ));
+  double rightmean = right/(N-k-1); //arma::mean(Y( linspace<uvec>(k+1, N-1, N-k-1) ));  
+  
+  double gini = ((k+1)*leftmean*(1-leftmean) + (N-k-1)*rightmean*(1-rightmean))/N;
 
   return (1 - gini); // larger the better 
 }
