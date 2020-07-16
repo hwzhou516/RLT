@@ -39,7 +39,7 @@ metric[1, 1] = difftime(Sys.time(), start_time, units = "secs")
 start_time <- Sys.time()
 RLTPred <- predict(RLTfit, testX, ncores = ncores)
 metric[1, 2] = difftime(Sys.time(), start_time, units = "secs")
-metric[1, 3] = mean((RLTPred$Prediction - testY)^2)
+metric[1, 3] = mean((as.numeric(RLTPred$Prediction >= 0.5) == testY))
 metric[1, 4] = object.size(RLTfit)
 
 options(rf.cores = ncores)
@@ -50,27 +50,10 @@ metric[2, 1] = difftime(Sys.time(), start_time, units = "secs")
 start_time <- Sys.time()
 rsfpred = predict(rsffit, data.frame(testX))
 metric[2, 2] = difftime(Sys.time(), start_time, units = "secs")
-metric[2, 3] = mean((rsfpred$predicted - testY)^2)
+metric[2, 3] = mean((as.numeric(rsfpred$predicted[,1] >= 0.5) == testY))
 metric[2, 4] = object.size(rsffit)
 
-start_time <- Sys.time()
-rf.fit <- randomForest(trainX, trainY, ntree = ntrees, mtry = mtry, nodesize = nmin, sampsize = trainn*sampleprob, importance = importance)
-metric[3, 1] = difftime(Sys.time(), start_time, units = "secs")
-start_time <- Sys.time()
-rf.pred <- predict(rf.fit, testX)
-metric[3, 2] = difftime(Sys.time(), start_time, units = "secs")
-metric[3, 3] = mean((rf.pred - testY)^2)
-metric[3, 4] = object.size(rf.fit)
 
-start_time <- Sys.time()
-rangerfit <- ranger(trainY ~ ., data = data.frame(trainX), num.trees = ntrees, 
-                    min.node.size = nmin, mtry = mtry, num.threads = ncores, 
-                    sample.fraction = sampleprob, importance = "permutation")
-metric[4, 1] = difftime(Sys.time(), start_time, units = "secs")
-rangerpred = predict(rangerfit, data.frame(testX))
-metric[4, 2] = difftime(Sys.time(), start_time, units = "secs")
-metric[4, 3] = mean((rangerpred$predictions - testY)^2)
-metric[4, 4] = object.size(rangerfit)
 
 
 

@@ -24,7 +24,7 @@ List GraphClaForestMultiFit(arma::mat& X,
               					   arma::umat& ObsTrack)
 {
   DEBUG_Rcout << "/// THIS IS A DEBUG MODE OF Classification Multi ///" << std::endl;
-  
+  //std::cout << Y <<endl;
   // readin parameters
   PARAM_GLOBAL Param(param);
   if(verbose) Param.print();

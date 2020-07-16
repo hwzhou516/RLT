@@ -28,12 +28,12 @@ void Graph_Find_A_Split(Multi_Split_Class& OneSplit,
   int split_rule = Param.split_rule;
   
   size_t N = obs_id.n_elem;
-  size_t P = var_id.n_elem;
+  size_t P = obs_id.n_elem;
   mtry = ( (mtry <= P) ? mtry:P ); // take minimum
   
   DEBUG_Rcout << " --- Reg_Find_A_Split with mtry = " << mtry << std::endl;
   // SVD Decomposition
-  int method = 1;
+  int method = 2;
   arma::mat A;
   
   if (method == 1) 
@@ -51,8 +51,8 @@ void Graph_Find_A_Split(Multi_Split_Class& OneSplit,
       
     }else{
         uvec var_try = arma::randperm(P, mtry);
-        A = CLA_DATA.X(obs_id, var_id(var_try));  
-        OneSplit.SplitVar = var_id(var_try);
+        A = CLA_DATA.X(obs_id, obs_id(var_try));  
+        OneSplit.SplitVar = obs_id(var_try);
       
     }
   }
@@ -66,6 +66,8 @@ void Graph_Find_A_Split(Multi_Split_Class& OneSplit,
   }
   
   // Centering
+  
+  
   // SVD Decomposition
   arma::mat U; arma::mat V; arma::vec s;
   svd(U,s,V,A);

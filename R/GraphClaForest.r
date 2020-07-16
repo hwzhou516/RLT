@@ -15,6 +15,7 @@ GraphClaForest <- function(x, y,
                            ...)
 {
   # prepare y
+  y <- as.numeric(levels(y))[y]
   storage.mode(y) <- "integer"
   
   # check splitting rule 
