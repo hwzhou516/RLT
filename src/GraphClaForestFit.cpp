@@ -31,7 +31,6 @@ List GraphClaForestMultiFit(arma::mat& X,
   PARAM_RLT Param_RLT(RLTparam);
   if (verbose and Param.reinforcement) Param_RLT.print();
   
-  
   // create data objects  
   RLT_CLA_DATA CLA_DATA(X, Y, Ncat, obsweight, varweight);
   
@@ -93,8 +92,7 @@ List GraphClaForestMultiFit(arma::mat& X,
   Forest_R["NodeAve"] = NodeAve;
   
   ReturnList["FittedForest"] = Forest_R;
-  
-  
+
   return ReturnList;
   
 }

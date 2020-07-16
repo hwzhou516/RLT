@@ -241,33 +241,29 @@ void split_id_cat(const vec& x, double value, uvec& left_id, uvec& obs_id, size_
   obs_id.resize(RightN+1);
 }
 
-
-void split_id_multi(const mat& X, const Multi_Split_Class& OneSplit, uvec& left_id, uvec& obs_id) // obs_id will be treated as the right node
+void split_id_multi(const vec& Splitid, const Multi_Split_Class& OneSplit, uvec& left_id, uvec& obs_id) // obs_id will be treated as the right node
 {
   double value = OneSplit.value;
-  vec x = X.cols(OneSplit.SplitVar) * OneSplit.Loading;
-  size_t RightN = obs_id.n_elem - 1;
+  int n = obs_id.n_elem;
+  uvec right_id(n);
+  size_t RightN = 0;
   size_t LeftN = 0;
-  size_t i = 0;
   
-  while( i <= RightN ){
-    
-    if ( x(obs_id(i)) <= value )
-    {
-      // move subject to left 
-      left_id(LeftN++) = obs_id(i);
-      
-      // remove subject from right 
-      obs_id(i) = obs_id( RightN--);
+  for(size_t i =0; i < n; i++ ){
+    if(Splitid(i) > value){
+      right_id(RightN) = obs_id(i);
+      RightN++;
     }else{
-      i++;
-   }
+      left_id(LeftN) = obs_id(i);
+      LeftN++;
+    }
   }
   
   left_id.resize(LeftN);
-  obs_id.resize(RightN+1);
-  
+  obs_id = right_id;
+  obs_id.resize(RightN);
 }
+
 
 // ****************//
 // field functions //

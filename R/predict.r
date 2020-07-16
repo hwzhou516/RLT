@@ -136,7 +136,7 @@ predict.RLT<- function(object,
                              ncores,
                              verbose)
     
-    class(pred) <- c("RLT", "pred", "reg")
+    class(pred) <- c("RLT", "pred", "graphcla")
     return(pred) 
   }
 }

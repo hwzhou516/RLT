@@ -17,7 +17,8 @@ void Graph_Find_A_Split(Multi_Split_Class& OneSplit,
                           const PARAM_GLOBAL& Param,
                           const PARAM_RLT& RLTParam,
                           uvec& obs_id,
-                          uvec& var_id)
+                          uvec& var_id,
+                          vec& Splitid)
 {
   size_t mtry = Param.mtry;
   size_t nmin = Param.nmin;
@@ -99,6 +100,7 @@ void Graph_Find_A_Split(Multi_Split_Class& OneSplit,
       OneSplit.Loading = TempSplit.Loading;
       OneSplit.value = TempSplit.value;
       OneSplit.score = TempSplit.score;
+      Splitid = U.unsafe_col(j);
     }
      
   }

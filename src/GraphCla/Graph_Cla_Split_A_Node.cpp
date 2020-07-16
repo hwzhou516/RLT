@@ -35,26 +35,28 @@ TERMINATENODE:
   }else{
 
     DEBUG_Rcout << "  -- Do split --" << std::endl;
-    arma::vec Loading; arma::uvec SplitVar;
+    arma::vec Loading;// record V
+    arma::uvec SplitVar; // record split variable
+    arma::vec Splitid; // record U
     Multi_Split_Class OneSplit(Loading, SplitVar);
     
-    Graph_Find_A_Split(OneSplit, CLA_DATA, Param, Param_RLT, obs_id, var_id);
-    //DEBUG_Rcout << "-- Found split on variable --" << OneSplit.Loading << " cut " << OneSplit.value << "Var" << obs_id << std::endl;
+    Graph_Find_A_Split(OneSplit, CLA_DATA, Param, Param_RLT, obs_id, var_id, Splitid);
+    DEBUG_Rcout << "-- Found split on variable --" << OneSplit.Loading << " cut " << OneSplit.value << "Var" << obs_id << std::endl;
     // store proportion
     OneTree.NodeAve(Node) = arma::mean(CLA_DATA.Y(obs_id));
     
     // if did not find a good split, terminate
-    //if (OneSplit.score <= 0)
-      //goto TERMINATENODE;
+    if (OneSplit.score <= 0)
+      goto TERMINATENODE;
     
     // construct indices for left and right nodes
-    
-    uvec left_id(N);
+    uvec left_id( obs_id.n_elem );
     //cout << CLA_DATA.X(obs_id, OneSplit.SplitVar) * OneSplit.Loading << endl;
     //cout << "split value: " << OneSplit.value << endl;
-    split_id_multi(CLA_DATA.X, OneSplit, left_id, obs_id);  // get the left and right id
-    //DEBUG_Rcout << " split at " << OneSplit.value << std::endl;
-    std::cout << "leftNum: "<< left_id.n_elem <<" rightNum: "<< obs_id.n_elem << endl;
+    split_id_multi(Splitid, OneSplit, left_id, obs_id);  // get the left and right id
+    
+    DEBUG_Rcout << " split at " << OneSplit.value << std::endl;
+    //std::cout << "leftNum: "<< left_id.n_elem <<" rightNum: "<< obs_id.n_elem << endl;
     
     // if this happens something about the splitting rule is wrong
     if (left_id.n_elem == N or obs_id.n_elem == N)
@@ -62,12 +64,12 @@ TERMINATENODE:
     
     // check if the current tree is long enough to store two more nodes
     // if not, extend the current tree
-   if ( OneTree.NodeType( OneTree.NodeType.size() - 2) > 0 )
-   {
+    if ( OneTree.NodeType( OneTree.NodeType.size() - 2) > 0 )
+    {
       DEBUG_Rcout << "  ------------- extend tree length: this shouldn't happen ----------- " << std::endl;
       // extend tree structure
       OneTree.extend();
-    }
+     }
   
     // find the locations of next left and right nodes     
     OneTree.NodeType(Node) = 2; // 0: unused, 1: reserved; 2: internal node; 3: terminal node	
@@ -76,7 +78,6 @@ TERMINATENODE:
     
     // Find next node
     OneTree.find_next_nodes(NextLeft, NextRight); 
-    
     DEBUG_Rcout << "  -- Next Left at --" << NextLeft << std::endl;
     DEBUG_Rcout << "  -- Next Right at --" << NextRight << std::endl;
     
@@ -88,7 +89,7 @@ TERMINATENODE:
     OneTree.RightNode(Node) = NextRight;  
 
     OneTree.NodeSize(Node) = left_id.n_elem + obs_id.n_elem;
-    //cout << left_id << endl;
+    
     // split the left and right nodes 
    
     Graph_Cla_Split_A_Node(NextLeft,

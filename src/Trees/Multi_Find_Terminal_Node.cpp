@@ -36,14 +36,15 @@ void Multi_Find_Terminal_Node(size_t Node,
     double SplitValue = OneTree.SplitValue(Node);
     double xtemp = 0;
     
+    vec xvec = X( real_id( proxy_id ), SplitVar) * SplitLoading;
+    
     for (size_t i = 0; i < size ; i++)
     {
-        xtemp =  0;//SplitVar * X * SplitVar * SplitLoading  ;
+        xtemp = xvec(i);
         
         if (xtemp > SplitValue)
           id_goright(i) = 1;
     }
-    
     
     uvec left_proxy = proxy_id(find(id_goright == 0));
     proxy_id = proxy_id(find(id_goright == 1));

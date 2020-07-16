@@ -31,7 +31,6 @@ void Cla_Multi_Forest_Pred(mat& Pred,
     #pragma omp for schedule(static)
     for (size_t nt = 0; nt < treeindex.n_elem; nt++)
     {
-      
       // initiate all observations
       uvec proxy_id = linspace<uvec>(0, N-1, N);
       uvec real_id = linspace<uvec>(0, N-1, N);

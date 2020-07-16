@@ -63,7 +63,8 @@ void Graph_Find_A_Split(Multi_Split_Class& OneSplit,
                         const PARAM_GLOBAL& Param,
                         const PARAM_RLT& RLTParam,
                         uvec& obs_id,
-                        uvec& var_id);
+                        uvec& var_id,
+                        vec& Splitid);
 
 void Graph_Cla_Split(Multi_Split_Class& TempSplit,
                      const vec& x, // x and Y are same length as obs_id 

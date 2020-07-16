@@ -133,7 +133,6 @@ RLT <- function(x, y, censor = NULL, model = NULL,
         				...)
 {
   # check inputs
-  
   if (missing(x)) stop("x is missing")
   if (missing(y)) stop("y is missing")
   

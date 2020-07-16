@@ -90,7 +90,7 @@ void get_samples(arma::uvec& inbagObs,
 void move_cont_index(size_t& lowindex, size_t& highindex, const vec& x, const uvec& indices, size_t nmin);
 void split_id(const vec& x, double value, uvec& left_id, uvec& obs_id);
 void split_id_cat(const vec& x, double value, uvec& left_id, uvec& obs_id, size_t ncat);
-void split_id_multi(const mat& X, const Multi_Split_Class& OneSplit, uvec& left_id, uvec& obs_id);
+void split_id_multi(const vec& Splitid, const Multi_Split_Class& OneSplit, uvec& left_id, uvec& obs_id);
 
 
 bool cat_reduced_compare(Cat_Class& a, Cat_Class& b);
