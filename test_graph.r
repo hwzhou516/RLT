@@ -4,14 +4,14 @@ library(randomForestSRC)
 library(ranger)
 
 set.seed(1)
-n = 1500
-trainn = 1000
+n = 1000
+trainn = 500
 testn = 500
 
 ntrees = 4
 ncores = 1
 nmin = 10
-mtry = 100
+mtry = 10
 sampleprob = 0.85
 rule = "best"
 nsplit = ifelse(rule == "best", 0, 3)
