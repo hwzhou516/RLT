@@ -64,7 +64,7 @@ void Graph_Find_A_Split(Multi_Split_Class& OneSplit,
     // redefine A = laplacian
     arma::mat A = CLA_DATA.X(obs_id, obs_id);
     //A = diagmat(A.each_row( [ ](vec& a){ sum(a); } )) - A;
-    DEBUG_Rcout << " laplacian not done yet " << std::endl;
+    
   }
   
   // Centering

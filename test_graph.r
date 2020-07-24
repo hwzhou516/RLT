@@ -7,7 +7,7 @@ n = nrow(kernel_90004)
 trainn = floor(n * 9/10)
 testn = n - trainn
 
-ntrees = 4
+ntrees = 50
 ncores = 1
 nmin = 10
 mtry = 10
