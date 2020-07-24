@@ -25,7 +25,7 @@ void Graph_Cla_Split_A_Node(size_t Node,
   size_t nmin = Param.nmin;
   bool useobsweight = Param.useobsweight;
 
-  //cout << Node << "th Node" <<" ObsNumber: " << N << endl;
+  cout << Node << "th Node" <<" ObsNumber: " << N << endl;
   if (N < 2*nmin){
 TERMINATENODE:
     

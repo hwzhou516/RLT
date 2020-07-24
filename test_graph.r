@@ -3,9 +3,8 @@ library(randomForest)
 library(randomForestSRC)
 library(ranger)
 
-set.seed(1)
-n = 1000
-trainn = 500
+n = 1500
+trainn = 1000
 testn = 500
 
 ntrees = 4

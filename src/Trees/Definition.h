@@ -569,10 +569,13 @@ public:
     size_t OldLength = NodeType.n_elem;
     size_t NewLength = (OldLength*1.5 > OldLength + 100)? (size_t) (OldLength*1.5):(OldLength + 100);
     
+    
     NodeType.resize(NewLength);
     NodeType(span(OldLength, NewLength-1)).zeros();
     
-    field_vec_resize(SplitLoading, NewLength);
+    field_vec_resize(SplitVar, NewLength);
+
+    field_vec_resize(SplitLoading, NewLength);    
     
     SplitValue.resize(NewLength);
     SplitValue(span(OldLength, NewLength-1)).zeros();

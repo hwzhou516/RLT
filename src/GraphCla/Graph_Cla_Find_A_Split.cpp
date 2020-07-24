@@ -32,8 +32,9 @@ void Graph_Find_A_Split(Multi_Split_Class& OneSplit,
   
   DEBUG_Rcout << " --- Reg_Find_A_Split with mtry = " << mtry << std::endl;
   // SVD Decomposition
-  int method = 1;
+  int method = 2;
   size_t k = 2;
+  k = ( (k <= mtry)? k : mtry);
   arma::mat A;
   
   if (method == 1) 
@@ -67,17 +68,15 @@ void Graph_Find_A_Split(Multi_Split_Class& OneSplit,
   }
   
   // Centering
-  //mat center = mean(A, 0);
-  //std::cout << A.n_rows << " / " << A.n_cols << endl;
-  //mat A_center = A - repmat(center, A.n_rows, 1);
-  //std::cout << A_center.n_rows << " / " << A_center.n_cols << endl;
+  mat center = mean(A, 0);
+
+  mat A_center = A - repmat(center, A.n_rows, 1);
+
   // SVD Decomposition
   arma::mat U; arma::mat V; arma::vec s;
-  svd(U,s,V,A);// - repmat(center, A.n_rows, 1));
-  
-  //arma::mat U_1; arma::mat V_1; arma::vec s_1;
-  //svd(U_1,s_1,V_1,A_center);
-  //std::cout<< A * (V_1.unsafe_col(1)/s(1)) << endl;
+  svd(U,s,V,A_center);// - repmat(center, A.n_rows, 1));
+
+  //std::cout<< A * (V.unsafe_col(1)/s(1)) << endl;
   
   // Tempmat contains the first k principle component
   // TempLoading contains the corresponding vector
@@ -92,7 +91,7 @@ void Graph_Find_A_Split(Multi_Split_Class& OneSplit,
     Multi_Split_Class TempSplit(TempLoad, TempSplitVar);
     TempSplit.value = 0;
     TempSplit.score = -1;
-    arma::vec TempSplitid = U.unsafe_col(j);
+    arma::vec TempSplitid = A * (V.unsafe_col(j)/s(j));
      
     Graph_Cla_Split(TempSplit, 
                         TempSplitid, 

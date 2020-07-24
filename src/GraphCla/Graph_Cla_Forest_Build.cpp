@@ -49,6 +49,8 @@ void Graph_Cla_Forest_Build(const RLT_CLA_DATA& CLA_DATA,
         
         inbagObs = obs_id;
         
+        std::cout << " ---- NEW Tree ---" << std::endl;
+        
         Cla_Multi_Tree_Class OneTree(CLA_FOREST.NodeTypeList(nt), 
                                      CLA_FOREST.SplitVarList(nt),
                                      CLA_FOREST.SplitLoadingList(nt),
