@@ -74,9 +74,7 @@ void Graph_Find_A_Split(Multi_Split_Class& OneSplit,
 
   // SVD Decomposition
   arma::mat U; arma::mat V; arma::vec s;
-  svd(U,s,V,A_center);// - repmat(center, A.n_rows, 1));
-
-  //std::cout<< A * (V.unsafe_col(1)/s(1)) << endl;
+  svd(U,s,V,A_center);
   
   // Tempmat contains the first k principle component
   // TempLoading contains the corresponding vector
