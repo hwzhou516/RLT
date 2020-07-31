@@ -2,12 +2,17 @@ library(RLT)
 library(randomForestSRC)
 library(gelnet)
 
+load("./data/kernel_9004_500.Rdata")
+load("./data/y.Rdata")
 
-n = nrow(kernel_90004)
+X <- kernel_90004
+y <- mortality
+
+n = nrow(X)
 trainn = floor(n * 9/10)
 testn = n - trainn
 
-ntrees = 50
+ntrees = 100
 ncores = 1
 nmin = 10
 mtry = 10
@@ -17,15 +22,15 @@ nsplit = ifelse(rule == "best", 0, 3)
 importance = FALSE
 
 trainid = sample(1:n, trainn,replace = TRUE)
-trainX = kernel_90004[trainid,trainid]
-trainY = mortality[trainid]
+trainX = X[trainid,trainid]
+trainY = y[trainid]
 
-testX = kernel_90004[-trainid,trainid]
-testY = mortality[-trainid]
+testX = X[-trainid,trainid]
+testY = y[-trainid]
 
 metric = data.frame(matrix(NA, 4, 4))
 rownames(metric) = c("rlt", "rsf", "rf", "ranger")
-colnames(metric) = c("fit.time", "pred.time", "pred.error", "obj.size")
+colnames(metric) = c("fit.time", "pred.time", "pred.accuracy", "obj.size")
 
 options(rf.cores = ncores)
 start_time <- Sys.time()
@@ -33,7 +38,7 @@ RLTfit <- RLT(trainX, as.factor(trainY), ntrees = ntrees, ncores = ncores, nmin 
               split.gen = rule, nsplit = nsplit, resample.prob = sampleprob, importance = importance)
 metric[1, 1] = difftime(Sys.time(), start_time, units = "secs")
 start_time <- Sys.time()
-RLTPred <- predict.RLT(RLTfit, testX, ncores = ncores)
+RLTPred <- predict(RLTfit, testX, ncores = ncores)
 metric[1, 2] = difftime(Sys.time(), start_time, units = "secs")
 metric[1, 3] = mean((as.numeric(RLTPred$Prediction >= 0.5) == testY))
 metric[1, 4] = object.size(RLTfit)

@@ -44,9 +44,7 @@ void Graph_Cla_Split(Multi_Split_Class& TempSplit,
         TempSplit.value = (x(indices(k)) + x(indices(k+1)))/2;
         TempSplit.score = temp_score;
     }
-    
   }
-   
   return;
 }
 
@@ -55,7 +53,7 @@ double graph_cla_score_gini(uvec& indices,
                             const uvec& Y,
                             size_t& k)
 {
-  DEBUG_Rcout <<" --- Supervised with Gini score --- "<< std::endl;
+  //DEBUG_Rcout <<" --- Supervised with Gini score --- "<< std::endl;
   
   size_t N = indices.n_elem;
   double left = 0; double right =0;
@@ -79,7 +77,7 @@ double cla_unsuper_score_var(uvec& indices,
                              const vec& x,
                              size_t& k)
 {
-  DEBUG_Rcout << " --- UnSupervised with Variance score --- "<< std::endl;
+  //DEBUG_Rcout << " --- UnSupervised with Variance score --- "<< std::endl;
   
   double score = 0;
   

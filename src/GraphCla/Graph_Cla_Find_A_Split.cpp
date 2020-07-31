@@ -30,11 +30,13 @@ void Graph_Find_A_Split(Multi_Split_Class& OneSplit,
   size_t P = obs_id.n_elem;
   mtry = ( (mtry <= P) ? mtry:P ); // take minimum
   
-  DEBUG_Rcout << " --- Reg_Find_A_Split with mtry = " << mtry << std::endl;
-  // SVD Decomposition
-  int method = 2;
   size_t k = 2;
   k = ( (k <= mtry)? k : mtry);
+  
+  //DEBUG_Rcout << " --- Reg_Find_A_Split with mtry = " << mtry << std::endl;
+  // SVD Decomposition
+  int method = 2;
+  
   arma::mat A;
   
   if (method == 1) 
@@ -62,15 +64,15 @@ void Graph_Find_A_Split(Multi_Split_Class& OneSplit,
   if (method == 3) // laplacian
   {
     // redefine A = laplacian
-    arma::mat A = CLA_DATA.X(obs_id, obs_id);
+    //arma::mat A = CLA_DATA.X(obs_id, obs_id);
     //A = diagmat(A.each_row( [ ](vec& a){ sum(a); } )) - A;
-    
+
   }
   
   // Centering
   mat center = mean(A, 0);
 
-  mat A_center = A - repmat(center, A.n_rows, 1);
+  mat A_center = A - repmat(center, A.n_rows, 1) + pow(10,-6) * mat(A.n_rows, A.n_cols, fill::eye);
 
   // SVD Decomposition
   arma::mat U; arma::mat V; arma::vec s;
@@ -108,8 +110,5 @@ void Graph_Find_A_Split(Multi_Split_Class& OneSplit,
       OneSplit.score = TempSplit.score;
       Splitid = TempSplitid;
     }
-     
   }
-
-
 }
